@@ -235,14 +235,14 @@ class Request extends HttpRequest
 
         foreach ($server as $key => $value) {
             if ($value || (! is_array($value) && strlen($value ?? ''))) {
-                if (strpos($key, 'HTTP_') === 0) {
-                    if (strpos($key, 'HTTP_COOKIE') === 0) {
+                if (str_starts_with($key, 'HTTP_')) {
+                    if (str_starts_with($key, 'HTTP_COOKIE')) {
                         // Cookies are handled using the $_COOKIE superglobal
                         continue;
                     }
 
                     $headers[strtr(ucwords(strtolower(strtr(substr($key, 5), '_', ' '))), ' ', '-')] = $value;
-                } elseif (strpos($key, 'CONTENT_') === 0) {
+                } elseif (str_starts_with($key, 'CONTENT_')) {
                     $name = substr($key, 8); // Remove "Content-"
                     $headers['Content-' . ($name === 'MD5' ? $name : ucfirst(strtolower($name)))] = $value;
                 }
@@ -259,7 +259,7 @@ class Request extends HttpRequest
         // set HTTP version
         if (
             isset($this->serverParams['SERVER_PROTOCOL'])
-            && strpos($this->serverParams['SERVER_PROTOCOL'], self::VERSION_10) !== false
+            && str_contains($this->serverParams['SERVER_PROTOCOL'], self::VERSION_10)
         ) {
             $this->setVersion(self::VERSION_10);
         }
@@ -269,7 +269,7 @@ class Request extends HttpRequest
 
         // URI scheme
         if (
-            (! empty($this->serverParams['HTTPS']) && strtolower($this->serverParams['HTTPS']) !== 'off')
+            (! empty($this->serverParams['HTTPS']) && strtolower((string) $this->serverParams['HTTPS']) !== 'off')
             || (! empty($this->serverParams['HTTP_X_FORWARDED_PROTO'])
                  && $this->serverParams['HTTP_X_FORWARDED_PROTO'] === 'https')
         ) {
@@ -512,15 +512,15 @@ class Request extends HttpRequest
             // @see https://www.php.net/manual/en/reserved.variables.server.php
             if (PHP_SAPI === 'cli') {
                 $argv = $this->getServer()->get('argv', []);
-                if (isset($argv[0]) && is_string($argv[0]) && $argv[0] !== '' && strpos($filename, $argv[0]) === 0) {
-                    $filename = substr($filename, strlen($argv[0]));
+                if (isset($argv[0]) && is_string($argv[0]) && $argv[0] !== '' && str_starts_with((string) $filename, $argv[0])) {
+                    $filename = substr((string) $filename, strlen($argv[0]));
                 }
             }
 
             $baseUrl  = '/';
             $basename = basename($filename ?? '');
             if ($basename) {
-                $path     = $phpSelf ? trim($phpSelf, '/') : '';
+                $path     = $phpSelf ? trim((string) $phpSelf, '/') : '';
                 $basePos  = strpos($path, $basename) ?: 0;
                 $baseUrl .= substr($path, 0, $basePos) . $basename;
             }
@@ -535,13 +535,13 @@ class Request extends HttpRequest
         $requestUri = $this->getRequestUri();
 
         // Full base URL matches.
-        if (0 === strpos($requestUri, $baseUrl)) {
+        if (str_starts_with($requestUri, (string) $baseUrl)) {
             return $baseUrl;
         }
 
         // Directory portion of base path matches.
-        $baseDir = str_replace('\\', '/', dirname($baseUrl));
-        if (0 === strpos($requestUri, $baseDir)) {
+        $baseDir = str_replace('\\', '/', dirname((string) $baseUrl));
+        if (str_starts_with($requestUri, $baseDir)) {
             return $baseDir;
         }
 
@@ -551,10 +551,10 @@ class Request extends HttpRequest
             $truncatedRequestUri = substr($requestUri, 0, $pos);
         }
 
-        $basename = basename($baseUrl);
+        $basename = basename((string) $baseUrl);
 
         // No match whatsoever
-        if (empty($basename) || false === strpos($truncatedRequestUri, $basename)) {
+        if (empty($basename) || !str_contains($truncatedRequestUri, $basename)) {
             return '';
         }
 
@@ -562,10 +562,10 @@ class Request extends HttpRequest
         // out of the base path. $pos !== 0 makes sure it is not matching a
         // value from PATH_INFO or QUERY_STRING.
         if (
-            strlen($requestUri) >= strlen($baseUrl)
-            && (false !== ($pos = strpos($requestUri, $baseUrl)) && $pos !== 0)
+            strlen($requestUri) >= strlen((string) $baseUrl)
+            && (false !== ($pos = strpos($requestUri, (string) $baseUrl)) && $pos !== 0)
         ) {
-            $baseUrl = substr($requestUri, 0, $pos + strlen($baseUrl));
+            return substr($requestUri, 0, $pos + strlen((string) $baseUrl));
         }
 
         return $baseUrl;
@@ -587,7 +587,7 @@ class Request extends HttpRequest
             return '';
         }
 
-        $filename = basename($this->getServer()->get('SCRIPT_FILENAME', ''));
+        $filename = basename((string) $this->getServer()->get('SCRIPT_FILENAME', ''));
 
         // basename() matches the script filename; return the directory
         if (basename($baseUrl) === $filename) {

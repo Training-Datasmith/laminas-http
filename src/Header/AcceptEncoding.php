@@ -17,20 +17,16 @@ class AcceptEncoding extends AbstractAccept
 
     /**
      * Get field name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Accept-Encoding';
     }
 
     /**
      * Cast to string
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Accept-Encoding: ' . $this->getFieldValue();
     }
@@ -64,9 +60,8 @@ class AcceptEncoding extends AbstractAccept
      * @see \Laminas\Http\Header\AbstractAccept::parseFieldValuePart()
      *
      * @param string $fieldValuePart
-     * @return EncodingFieldValuePart
      */
-    protected function parseFieldValuePart($fieldValuePart)
+    protected function parseFieldValuePart($fieldValuePart): \Laminas\Http\Header\Accept\FieldValuePart\EncodingFieldValuePart
     {
         $internalValues = parent::parseFieldValuePart($fieldValuePart);
 

@@ -81,10 +81,7 @@ class Response extends HttpResponse
         return $this->contentSent;
     }
 
-    /**
-     * @return void
-     */
-    public function setHeadersSentHandler(callable $handler)
+    public function setHeadersSentHandler(callable $handler): void
     {
         $this->headersSentHandler = $handler;
     }

@@ -12,7 +12,7 @@ use function is_string;
  *
  * @link      http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4
  */
-abstract class AbstractMessage extends Message
+abstract class AbstractMessage extends Message implements \Stringable
 {
     /**#@+
      *
@@ -89,11 +89,9 @@ abstract class AbstractMessage extends Message
 
     /**
      * Allow PHP casting of this object
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->toString();
+        return (string) $this->toString();
     }
 }

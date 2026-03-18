@@ -53,19 +53,11 @@ class Test implements AdapterInterface
     protected $nextRequestWillFail = false;
 
     /**
-     * Adapter constructor, currently empty. Config is set using setOptions()
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Set the nextRequestWillFail flag
      *
      * @param  bool $flag
-     * @return Test
      */
-    public function setNextRequestWillFail($flag)
+    public function setNextRequestWillFail($flag): static
     {
         $this->nextRequestWillFail = (bool) $flag;
 
@@ -78,7 +70,7 @@ class Test implements AdapterInterface
      * @param  array|Traversable $options
      * @throws Exception\InvalidArgumentException
      */
-    public function setOptions($options = [])
+    public function setOptions($options = []): void
     {
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
@@ -91,7 +83,7 @@ class Test implements AdapterInterface
         }
 
         foreach ($options as $k => $v) {
-            $this->config[strtolower($k)] = $v;
+            $this->config[strtolower((string) $k)] = $v;
         }
     }
 
@@ -103,7 +95,7 @@ class Test implements AdapterInterface
      * @param  bool   $secure
      * @throws Exception\RuntimeException
      */
-    public function connect($host, $port = 80, $secure = false)
+    public function connect($host, $port = 80, $secure = false): void
     {
         if ($this->nextRequestWillFail) {
             $this->nextRequestWillFail = false;
@@ -121,7 +113,7 @@ class Test implements AdapterInterface
      * @param string        $body
      * @return string Request as string
      */
-    public function write($method, $uri, $httpVer = '1.1', $headers = [], $body = '')
+    public function write($method, $uri, $httpVer = '1.1', $headers = [], $body = ''): string
     {
         // Build request headers
         $path = $uri->getPath();
@@ -171,7 +163,7 @@ class Test implements AdapterInterface
      *
      * @param Response|array|string $response
      */
-    public function setResponse($response)
+    public function setResponse($response): void
     {
         if ($response instanceof Response) {
             $response = $response->toString();
@@ -186,7 +178,7 @@ class Test implements AdapterInterface
      *
      * @param string|Response $response
      */
-    public function addResponse($response)
+    public function addResponse($response): void
     {
         if ($response instanceof Response) {
             $response = $response->toString();
@@ -202,7 +194,7 @@ class Test implements AdapterInterface
      * @param int $index
      * @throws Exception\OutOfRangeException
      */
-    public function setResponseIndex($index)
+    public function setResponseIndex($index): void
     {
         if ($index < 0 || $index >= count($this->responses)) {
             throw new Exception\OutOfRangeException(

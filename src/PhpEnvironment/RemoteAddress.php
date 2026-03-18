@@ -51,7 +51,7 @@ class RemoteAddress
      * @param  bool  $useProxy Whether to check also proxied IP addresses.
      * @return $this
      */
-    public function setUseProxy($useProxy = true)
+    public function setUseProxy($useProxy = true): static
     {
         $this->useProxy = $useProxy;
         return $this;
@@ -72,7 +72,7 @@ class RemoteAddress
      *
      * @return $this
      */
-    public function setTrustedProxies(array $trustedProxies)
+    public function setTrustedProxies(array $trustedProxies): static
     {
         $this->trustedProxies = $trustedProxies;
         return $this;
@@ -84,7 +84,7 @@ class RemoteAddress
      * @param  string $header
      * @return $this
      */
-    public function setProxyHeader($header = 'X-Forwarded-For')
+    public function setProxyHeader($header = 'X-Forwarded-For'): static
     {
         $this->proxyHeader = $this->normalizeProxyHeader($header);
         return $this;
@@ -102,12 +102,7 @@ class RemoteAddress
             return $ip;
         }
 
-        // direct IP address
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            return $_SERVER['REMOTE_ADDR'];
-        }
-
-        return '';
+        return $_SERVER['REMOTE_ADDR'] ?? '';
     }
 
     /**
@@ -117,7 +112,7 @@ class RemoteAddress
      *
      * @return false|string
      */
-    protected function getIpAddressFromProxy()
+    protected function getIpAddressFromProxy(): false|string
     {
         if (
             ! $this->useProxy
@@ -132,9 +127,9 @@ class RemoteAddress
         }
 
         // Extract IPs
-        $ips = explode(',', $_SERVER[$header]);
+        $ips = explode(',', (string) $_SERVER[$header]);
         // trim, so we can compare against trusted proxies properly
-        $ips = array_map('trim', $ips);
+        $ips = array_map(trim(...), $ips);
         // remove trusted proxy IPs
         $ips = array_diff($ips, $this->trustedProxies);
 
@@ -164,8 +159,8 @@ class RemoteAddress
     {
         $header = strtoupper($header);
         $header = str_replace('-', '_', $header);
-        if (0 !== strpos($header, 'HTTP_')) {
-            $header = 'HTTP_' . $header;
+        if (!str_starts_with($header, 'HTTP_')) {
+            return 'HTTP_' . $header;
         }
         return $header;
     }

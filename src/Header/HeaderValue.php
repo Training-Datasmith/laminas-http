@@ -26,26 +26,26 @@ final class HeaderValue
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      *
      * @param string $value
-     * @return string
      */
-    public static function filter($value)
+    public static function filter($value): string
     {
         $value  = (string) $value;
         $length = strlen($value);
         $string = '';
         for ($i = 0; $i < $length; $i += 1) {
             $ascii = ord($value[$i]);
-
             // Non-visible, non-whitespace characters
             // 9 === horizontal tab
             // 32-126, 128-254 === visible
             // 127 === DEL
             // 255 === null byte
-            if (
-                ($ascii < 32 && $ascii !== 9)
-                || $ascii === 127
-                || $ascii > 254
-            ) {
+            if ($ascii < 32 && $ascii !== 9) {
+                continue;
+            }
+            if ($ascii === 127) {
+                continue;
+            }
+            if ($ascii > 254) {
                 continue;
             }
 
@@ -65,9 +65,8 @@ final class HeaderValue
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      *
      * @param string $value
-     * @return bool
      */
-    public static function isValid($value)
+    public static function isValid($value): bool
     {
         $value  = (string) $value;
         $length = strlen($value);
@@ -96,9 +95,8 @@ final class HeaderValue
      *
      * @param string $value
      * @throws Exception\RuntimeException For invalid values.
-     * @return void
      */
-    public static function assertValid($value)
+    public static function assertValid($value): void
     {
         if (! self::isValid($value)) {
             throw new Exception\InvalidArgumentException('Invalid header value');

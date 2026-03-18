@@ -70,7 +70,7 @@ class Stream extends Response
      *
      * @param int $contentLength
      */
-    public function setContentLength($contentLength = null)
+    public function setContentLength($contentLength = null): void
     {
         $this->contentLength = $contentLength;
     }
@@ -122,7 +122,7 @@ class Stream extends Response
      *
      * @param bool $cleanup
      */
-    public function setCleanup($cleanup = true)
+    public function setCleanup($cleanup = true): void
     {
         $this->cleanup = $cleanup;
     }
@@ -212,10 +212,10 @@ class Stream extends Response
             if ($header instanceof ContentLength) {
                 $response->setContentLength((int) $header->getFieldValue());
                 $contentLength = $response->getContentLength();
-                if (strlen($response->content) > $contentLength) {
+                if (strlen((string) $response->content) > $contentLength) {
                     throw new Exception\OutOfRangeException(sprintf(
                         'Too much content was extracted from the stream (%d instead of %d bytes)',
-                        strlen($response->content),
+                        strlen((string) $response->content),
                         $contentLength
                     ));
                 }

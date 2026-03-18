@@ -12,7 +12,7 @@ class GenericMultiHeader extends GenericHeader implements MultipleHeaderInterfac
      * @param string $headerLine
      * @return static|static[]
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): array|self
     {
         [$fieldName, $fieldValue] = GenericHeader::splitHeaderLine($headerLine);
 
@@ -22,13 +22,11 @@ class GenericMultiHeader extends GenericHeader implements MultipleHeaderInterfac
                 $headers[] = new static($fieldName, $multiValue);
             }
             return $headers;
-        } else {
-            return new static($fieldName, $fieldValue);
         }
+        return new static($fieldName, $fieldValue);
     }
 
-    /** @return string */
-    public function toStringMultipleHeaders(array $headers)
+    public function toStringMultipleHeaders(array $headers): string
     {
         $name   = $this->getFieldName();
         $values = [$this->getFieldValue()];

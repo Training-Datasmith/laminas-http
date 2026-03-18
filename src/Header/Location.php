@@ -11,10 +11,8 @@ class Location extends AbstractLocation
 {
     /**
      * Return header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Location';
     }

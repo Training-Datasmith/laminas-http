@@ -71,9 +71,8 @@ class Cookies extends Headers
      * @static
      * @throws Exception\RuntimeException
      * @param string $string
-     * @return void
      */
-    public static function fromString($string)
+    public static function fromString($string): never
     {
         throw new Exception\RuntimeException(
             self::class . '::' . __FUNCTION__ . ' should not be used as a factory, use '
@@ -89,7 +88,7 @@ class Cookies extends Headers
      * @param Uri\Uri|string $refUri Optional reference URI (for domain, path, secure)
      * @throws Exception\InvalidArgumentException
      */
-    public function addCookie($cookie, $refUri = null)
+    public function addCookie($cookie, $refUri = null): void
     {
         if (is_string($cookie)) {
             $cookie = SetCookie::fromString($cookie, $refUri);
@@ -116,7 +115,7 @@ class Cookies extends Headers
      *
      * @param Uri\Uri|string $refUri Requested URI
      */
-    public function addCookiesFromResponse(Response $response, $refUri)
+    public function addCookiesFromResponse(Response $response, $refUri): void
     {
         $cookieHdrs = $response->getHeaders()->get('Set-Cookie');
 
@@ -220,20 +219,14 @@ class Cookies extends Headers
         if (isset($this->cookies[$uri->getHost()][$path][$cookieName])) {
             $cookie = $this->cookies[$uri->getHost()][$path][$cookieName];
 
-            switch ($retAs) {
-                case self::COOKIE_OBJECT:
-                    return $cookie;
-
-                case self::COOKIE_STRING_ARRAY:
-                case self::COOKIE_STRING_CONCAT:
-                    return $cookie->__toString();
-
-                default:
-                    throw new Exception\InvalidArgumentException(sprintf(
-                        'Invalid value passed for $retAs: %s',
-                        $retAs
-                    ));
-            }
+            return match ($retAs) {
+                self::COOKIE_OBJECT => $cookie,
+                self::COOKIE_STRING_ARRAY, self::COOKIE_STRING_CONCAT => $cookie->__toString(),
+                default => throw new Exception\InvalidArgumentException(sprintf(
+                    'Invalid value passed for $retAs: %s',
+                    $retAs
+                )),
+            };
         }
 
         return false;
@@ -261,18 +254,14 @@ class Cookies extends Headers
                 }
             }
             return $ret;
-        } elseif ($ptr instanceof SetCookie) {
-            switch ($retAs) {
-                case self::COOKIE_STRING_ARRAY:
-                    return [$ptr->__toString()];
-
-                case self::COOKIE_STRING_CONCAT:
-                    return $ptr->__toString();
-
-                case self::COOKIE_OBJECT:
-                default:
-                    return [$ptr];
-            }
+        }
+        // @codingStandardsIgnoreEnd
+        if ($ptr instanceof SetCookie) {
+            return match ($retAs) {
+                self::COOKIE_STRING_ARRAY => [$ptr->__toString()],
+                self::COOKIE_STRING_CONCAT => $ptr->__toString(),
+                default => [$ptr],
+            };
         }
     }
 
@@ -280,10 +269,9 @@ class Cookies extends Headers
      * Return a subset of the cookies array matching a specific domain
      *
      * @param string $domain
-     * @return array
      */
     // @codingStandardsIgnoreStart
-    protected function _matchDomain($domain)
+    protected function _matchDomain($domain): array
     {
         // @codingStandardsIgnoreEnd
         $ret = [];
@@ -302,10 +290,9 @@ class Cookies extends Headers
      *
      * @param array $domains
      * @param string $path
-     * @return array
      */
     // @codingStandardsIgnoreStart
-    protected function _matchPath($domains, $path)
+    protected function _matchPath($domains, $path): array
     {
         // @codingStandardsIgnoreEnd
         $ret = [];
@@ -333,10 +320,9 @@ class Cookies extends Headers
      *
      * @param Response $response HTTP Response object
      * @param Uri\Uri|string $refUri The requested URI
-     * @return static
      * @todo Add the $uri functionality.
      */
-    public static function fromResponse(Response $response, $refUri)
+    public static function fromResponse(Response $response, $refUri): static
     {
         $jar = new static();
         $jar->addCookiesFromResponse($response, $refUri);
@@ -345,10 +331,8 @@ class Cookies extends Headers
 
     /**
      * Tells if the array of cookies is empty
-     *
-     * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return count($this) === 0;
     }
@@ -358,7 +342,7 @@ class Cookies extends Headers
      *
      * @return $this
      */
-    public function reset()
+    public function reset(): static
     {
         $this->cookies = $this->rawCookies = [];
         return $this;

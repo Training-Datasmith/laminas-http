@@ -133,19 +133,12 @@ class Socket implements HttpAdapter, StreamInterface
     protected $setSslCryptoMethod = true;
 
     /**
-     * Adapter constructor, currently empty. Config is set using setOptions()
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Set the configuration array for the adapter
      *
      * @param  array|Traversable $options
      * @throws AdapterException\InvalidArgumentException
      */
-    public function setOptions($options = [])
+    public function setOptions($options = []): void
     {
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
@@ -157,7 +150,7 @@ class Socket implements HttpAdapter, StreamInterface
         }
 
         foreach ($options as $k => $v) {
-            $this->config[strtolower($k)] = $v;
+            $this->config[strtolower((string) $k)] = $v;
         }
     }
 
@@ -184,7 +177,7 @@ class Socket implements HttpAdapter, StreamInterface
      * @throws Exception\InvalidArgumentException
      * @return $this
      */
-    public function setStreamContext($context)
+    public function setStreamContext($context): static
     {
         if (is_resource($context) && get_resource_type($context) === 'stream-context') {
             $this->context = $context;
@@ -225,7 +218,7 @@ class Socket implements HttpAdapter, StreamInterface
      * @param  bool $secure
      * @throws AdapterException\RuntimeException
      */
-    public function connect($host, $port = 80, $secure = false)
+    public function connect($host, $port = 80, $secure = false): void
     {
         // If we are connected to the wrong host, disconnect first
         $connectedTo   = $this->connectedTo[0] ?? '';
@@ -446,7 +439,7 @@ class Socket implements HttpAdapter, StreamInterface
      * @throws AdapterException\RuntimeException
      * @return string Request as string
      */
-    public function write($method, $uri, $httpVer = '1.1', $headers = [], $body = '')
+    public function write($method, $uri, $httpVer = '1.1', $headers = [], $body = ''): string
     {
         // Make sure we're properly connected
         if (! $this->socket) {
@@ -454,7 +447,7 @@ class Socket implements HttpAdapter, StreamInterface
         }
 
         $host = $uri->getHost();
-        $host = (strtolower($uri->getScheme()) === 'https' ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
+        $host = (strtolower((string) $uri->getScheme()) === 'https' ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
         if ($this->connectedTo[0] !== $host || $this->connectedTo[1] !== $uri->getPort()) {
             throw new AdapterException\RuntimeException('Trying to write but we are connected to the wrong host');
         }
@@ -511,7 +504,7 @@ class Socket implements HttpAdapter, StreamInterface
         $gotStatus = false;
 
         while (($line = fgets($this->socket)) !== false) {
-            $gotStatus = $gotStatus || (strpos($line, 'HTTP') !== false);
+            $gotStatus = $gotStatus || (str_contains($line, 'HTTP'));
             if ($gotStatus) {
                 $response .= $line;
                 if (rtrim($line) === '') {
@@ -692,7 +685,7 @@ class Socket implements HttpAdapter, StreamInterface
     /**
      * Close the connection to the server
      */
-    public function close()
+    public function close(): void
     {
         if (is_resource($this->socket)) {
             ErrorHandler::start();
@@ -732,7 +725,7 @@ class Socket implements HttpAdapter, StreamInterface
      * @param resource $stream
      * @return Socket
      */
-    public function setOutputStream($stream)
+    public function setOutputStream($stream): static
     {
         $this->outStream = $stream;
         return $this;

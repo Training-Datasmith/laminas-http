@@ -27,7 +27,7 @@ use function strtotime;
  * While RFC 1945 requires an absolute URI, most of the browsers also support relative URI
  * This class allows relative URIs, and let user retrieve URI instance if strict validation needed
  */
-abstract class AbstractDate implements HeaderInterface
+abstract class AbstractDate implements HeaderInterface, \Stringable
 {
     /**
      * Date formats according to RFC 2616
@@ -100,7 +100,7 @@ abstract class AbstractDate implements HeaderInterface
      */
     public static function fromTimeString($time)
     {
-        return static::fromTimestamp(strtotime($time));
+        return static::fromTimestamp(strtotime((string) $time));
     }
 
     /**
@@ -131,7 +131,7 @@ abstract class AbstractDate implements HeaderInterface
      * @param int $format
      * @throws InvalidArgumentException
      */
-    public static function setDateFormat($format)
+    public static function setDateFormat($format): void
     {
         if (! isset(static::$dateFormats[$format])) {
             throw new InvalidArgumentException(sprintf(
@@ -167,7 +167,7 @@ abstract class AbstractDate implements HeaderInterface
                 $date = new DateTime($date, new DateTimeZone('GMT'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException(
-                    sprintf('Invalid date passed as string (%s)', (string) $date),
+                    sprintf('Invalid date passed as string (%s)', $date),
                     $e->getCode(),
                     $e
                 );
@@ -222,7 +222,7 @@ abstract class AbstractDate implements HeaderInterface
                 $date = new DateTime($date, new DateTimeZone('GMT'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException(
-                    sprintf('Invalid Date passed as string (%s)', (string) $date),
+                    sprintf('Invalid Date passed as string (%s)', $date),
                     $e->getCode(),
                     $e
                 );
@@ -259,10 +259,8 @@ abstract class AbstractDate implements HeaderInterface
 
     /**
      * Allow casting to string
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toString();
     }

@@ -18,9 +18,8 @@ class ProxyAuthenticate implements MultipleHeaderInterface
 
     /**
      * @param string $headerLine
-     * @return static
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
 
@@ -45,26 +44,22 @@ class ProxyAuthenticate implements MultipleHeaderInterface
         }
     }
 
-    /** @return string */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Proxy-Authenticate';
     }
 
-    /** @return string */
-    public function getFieldValue()
+    public function getFieldValue(): string
     {
         return (string) $this->value;
     }
 
-    /** @return string */
-    public function toString()
+    public function toString(): string
     {
         return 'Proxy-Authenticate: ' . $this->getFieldValue();
     }
 
-    /** @return string */
-    public function toStringMultipleHeaders(array $headers)
+    public function toStringMultipleHeaders(array $headers): string
     {
         $strings = [$this->toString()];
         foreach ($headers as $header) {

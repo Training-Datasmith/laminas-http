@@ -23,7 +23,7 @@ use function trim;
  * While RFC 1945 requires an absolute URI, most of the browsers also support relative URI
  * This class allows relative URIs, and let user retrieve URI instance if strict validation needed
  */
-abstract class AbstractLocation implements HeaderInterface
+abstract class AbstractLocation implements HeaderInterface, \Stringable
 {
     /**
      * URI for this header
@@ -71,15 +71,9 @@ abstract class AbstractLocation implements HeaderInterface
         if (is_string($uri)) {
             try {
                 $uri = UriFactory::factory($uri);
-            } catch (UriException\InvalidUriPartException $e) {
+            } catch (UriException\InvalidUriPartException|UriException\InvalidArgumentException $e) {
                 throw new Exception\InvalidArgumentException(
-                    sprintf('Invalid URI passed as string (%s)', (string) $uri),
-                    $e->getCode(),
-                    $e
-                );
-            } catch (UriException\InvalidArgumentException $e) {
-                throw new Exception\InvalidArgumentException(
-                    sprintf('Invalid URI passed as string (%s)', (string) $uri),
+                    sprintf('Invalid URI passed as string (%s)', $uri),
                     $e->getCode(),
                     $e
                 );
@@ -140,10 +134,8 @@ abstract class AbstractLocation implements HeaderInterface
 
     /**
      * Allow casting to string
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toString();
     }

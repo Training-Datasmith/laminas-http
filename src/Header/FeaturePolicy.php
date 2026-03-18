@@ -94,7 +94,7 @@ class FeaturePolicy implements HeaderInterface
      * @return $this
      * @throws Exception\InvalidArgumentException If the name is not a valid directive name.
      */
-    public function setDirective($name, array $sources)
+    public function setDirective($name, array $sources): static
     {
         if (! in_array($name, $this->validDirectiveNames, true)) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -118,10 +118,9 @@ class FeaturePolicy implements HeaderInterface
      * Create Feature Policy header from a given header line
      *
      * @param string $headerLine The header line to parse.
-     * @return static
      * @throws Exception\InvalidArgumentException If the name field in the given header line does not match.
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         $header         = new static();
         $headerName     = $header->getFieldName();
@@ -154,20 +153,16 @@ class FeaturePolicy implements HeaderInterface
 
     /**
      * Get the header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Feature-Policy';
     }
 
     /**
      * Get the header value
-     *
-     * @return string
      */
-    public function getFieldValue()
+    public function getFieldValue(): string
     {
         $directives = [];
         foreach ($this->directives as $name => $value) {
@@ -178,10 +173,8 @@ class FeaturePolicy implements HeaderInterface
 
     /**
      * Return the header as a string
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return sprintf('%s: %s', $this->getFieldName(), $this->getFieldValue());
     }

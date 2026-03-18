@@ -36,9 +36,8 @@ class CacheControl implements HeaderInterface
      *
      * @param string $headerLine
      * @throws Exception\InvalidArgumentException
-     * @return static
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
 
@@ -64,20 +63,16 @@ class CacheControl implements HeaderInterface
 
     /**
      * Required from HeaderDescription interface
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Cache-Control';
     }
 
     /**
      * Checks if the internal directives array is empty
-     *
-     * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return empty($this->directives);
     }
@@ -91,7 +86,7 @@ class CacheControl implements HeaderInterface
      * @param string|bool $value
      * @return $this
      */
-    public function addDirective($key, $value = true)
+    public function addDirective($key, $value = true): static
     {
         HeaderValue::assertValid($key);
         if (! is_bool($value)) {
@@ -105,9 +100,8 @@ class CacheControl implements HeaderInterface
      * Check the internal directives array for a directive
      *
      * @param string $key
-     * @return bool
      */
-    public function hasDirective($key)
+    public function hasDirective($key): bool
     {
         return array_key_exists($key, $this->directives);
     }
@@ -129,7 +123,7 @@ class CacheControl implements HeaderInterface
      * @param string $key
      * @return $this
      */
-    public function removeDirective($key)
+    public function removeDirective($key): static
     {
         unset($this->directives[$key]);
         return $this;
@@ -137,10 +131,8 @@ class CacheControl implements HeaderInterface
 
     /**
      * Assembles the directives into a comma-delimited string
-     *
-     * @return string
      */
-    public function getFieldValue()
+    public function getFieldValue(): string
     {
         $parts = [];
         ksort($this->directives);
@@ -148,7 +140,7 @@ class CacheControl implements HeaderInterface
             if (true === $value) {
                 $parts[] = $key;
             } else {
-                if (preg_match('#[^a-zA-Z0-9._-]#', $value)) {
+                if (preg_match('#[^a-zA-Z0-9._-]#', (string) $value)) {
                     $value = '"' . $value . '"';
                 }
                 $parts[] = $key . '=' . $value;
@@ -159,10 +151,8 @@ class CacheControl implements HeaderInterface
 
     /**
      * Returns a string representation of the HTTP Cache-Control header
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Cache-Control: ' . $this->getFieldValue();
     }

@@ -167,7 +167,7 @@ class Curl implements HttpAdapter, StreamInterface
      * @return $this
      * @throws AdapterException\InvalidArgumentException
      */
-    public function setOptions($options = [])
+    public function setOptions($options = []): static
     {
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
@@ -182,7 +182,7 @@ class Curl implements HttpAdapter, StreamInterface
         /** Config Key Normalization */
         foreach ($options as $k => $v) {
             unset($options[$k]); // unset original value
-            $options[str_replace(['-', '_', ' ', '.'], '', strtolower($k))] = $v; // replace w/ normalized
+            $options[str_replace(['-', '_', ' ', '.'], '', strtolower((string) $k))] = $v; // replace w/ normalized
         }
 
         if (isset($options['proxyuser']) && isset($options['proxypass'])) {
@@ -196,7 +196,7 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         foreach ($options as $k => $v) {
-            $option = strtolower($k);
+            $option = strtolower((string) $k);
             switch ($option) {
                 case 'proxyhost':
                     $this->setCurlOption(CURLOPT_PROXY, $v);
@@ -233,7 +233,7 @@ class Curl implements HttpAdapter, StreamInterface
      * @param  mixed $value
      * @return $this
      */
-    public function setCurlOption($option, $value)
+    public function setCurlOption($option, $value): static
     {
         if (! isset($this->config['curloptions'])) {
             $this->config['curloptions'] = [];
@@ -248,10 +248,9 @@ class Curl implements HttpAdapter, StreamInterface
      * @param  string  $host
      * @param  int     $port
      * @param  bool $secure
-     * @return void
      * @throws AdapterException\RuntimeException If unable to connect.
      */
-    public function connect($host, $port = 80, $secure = false)
+    public function connect($host, $port = 80, $secure = false): void
     {
         // If we're already connected, disconnect first
         if ($this->curl) {
@@ -346,7 +345,7 @@ class Curl implements HttpAdapter, StreamInterface
      * @throws AdapterException\InvalidArgumentException If $method is currently not supported.
      * @throws AdapterException\TimeoutException If connection timed out.
      */
-    public function write($method, $uri, $httpVersion = '1.1', $headers = [], $body = '')
+    public function write($method, $uri, $httpVersion = '1.1', $headers = [], $body = ''): string
     {
         if (is_float($httpVersion)) {
             $httpVersion = number_format($httpVersion, 1, '.', '');
@@ -463,7 +462,7 @@ class Curl implements HttpAdapter, StreamInterface
         if ($this->outputStream) {
             // headers will be read into the response
             curl_setopt($this->curl, CURLOPT_HEADER, false);
-            curl_setopt($this->curl, CURLOPT_HEADERFUNCTION, [$this, 'readHeader']);
+            curl_setopt($this->curl, CURLOPT_HEADERFUNCTION, $this->readHeader(...));
             // and data will be written into the file
             curl_setopt($this->curl, CURLOPT_FILE, $this->outputStream);
         } else {
@@ -475,9 +474,9 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         // Treating basic auth headers in a special way
-        if (array_key_exists('Authorization', $headers) && 'Basic' === substr($headers['Authorization'], 0, 5)) {
+        if (array_key_exists('Authorization', $headers) && str_starts_with((string) $headers['Authorization'], 'Basic')) {
             curl_setopt($this->curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-            curl_setopt($this->curl, CURLOPT_USERPWD, base64_decode(substr($headers['Authorization'], 6)));
+            curl_setopt($this->curl, CURLOPT_USERPWD, base64_decode(substr((string) $headers['Authorization'], 6)));
             unset($headers['Authorization']);
         }
 
@@ -512,14 +511,16 @@ class Curl implements HttpAdapter, StreamInterface
         // set additional curl options
         if (isset($this->config['curloptions'])) {
             foreach ((array) $this->config['curloptions'] as $k => $v) {
-                if (! in_array($k, $this->invalidOverwritableCurlOptions)) {
-                    if (curl_setopt($this->curl, $k, $v) === false) {
-                        throw new AdapterException\RuntimeException(sprintf(
-                            'Unknown or erroreous cURL option "%s" set',
-                            $k
-                        ));
-                    }
+                if (in_array($k, $this->invalidOverwritableCurlOptions)) {
+                    continue;
                 }
+                if (curl_setopt($this->curl, $k, $v) !== false) {
+                    continue;
+                }
+                throw new AdapterException\RuntimeException(sprintf(
+                    'Unknown or erroreous cURL option "%s" set',
+                    $k
+                ));
             }
         }
 
@@ -562,14 +563,14 @@ class Curl implements HttpAdapter, StreamInterface
             isset($this->config['curloptions'][CURLOPT_ENCODING])
             && '' === $this->config['curloptions'][CURLOPT_ENCODING]
         ) {
-            $responseHeaders = preg_replace("/Content-Encoding:\s*gzip\\r\\n/i", '', $responseHeaders);
+            $responseHeaders = preg_replace("/Content-Encoding:\s*gzip\\r\\n/i", '', (string) $responseHeaders);
         }
 
         // cURL automatically handles Proxy rewrites, remove the "HTTP/1.0 200 Connection established" string:
         $responseHeaders = preg_replace(
             "/HTTP\/1.[01]\s*200\s*Connection\s*established\\r\\n\\r\\n/",
             '',
-            $responseHeaders
+            (string) $responseHeaders
         );
 
         // replace old header with new, cleaned up, header
@@ -602,7 +603,7 @@ class Curl implements HttpAdapter, StreamInterface
     /**
      * Close the connection to the server
      */
-    public function close()
+    public function close(): void
     {
         if (is_resource($this->curl)) {
             curl_close($this->curl);
@@ -627,7 +628,7 @@ class Curl implements HttpAdapter, StreamInterface
      * @param resource $stream
      * @return $this
      */
-    public function setOutputStream($stream)
+    public function setOutputStream($stream): static
     {
         $this->outputStream = $stream;
         return $this;
@@ -637,10 +638,8 @@ class Curl implements HttpAdapter, StreamInterface
      * Header reader function for CURL
      *
      * @param resource $curl
-     * @param string $header
-     * @return int
      */
-    public function readHeader($curl, $header)
+    public function readHeader($curl, string $header): int
     {
         $this->response .= $header;
         return strlen($header);

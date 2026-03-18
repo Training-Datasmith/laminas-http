@@ -16,9 +16,8 @@ class AcceptRanges implements HeaderInterface
 
     /**
      * @param string $headerLine
-     * @return static
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
 
@@ -40,8 +39,7 @@ class AcceptRanges implements HeaderInterface
         }
     }
 
-    /** @return string */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Accept-Ranges';
     }
@@ -54,23 +52,20 @@ class AcceptRanges implements HeaderInterface
 
     /**
      * @param string $rangeUnit
-     * @return static
      */
-    public function setRangeUnit($rangeUnit)
+    public function setRangeUnit($rangeUnit): static
     {
         HeaderValue::assertValid($rangeUnit);
         $this->rangeUnit = $rangeUnit;
         return $this;
     }
 
-    /** @return string */
-    public function getRangeUnit()
+    public function getRangeUnit(): string
     {
         return (string) $this->rangeUnit;
     }
 
-    /** @return string */
-    public function toString()
+    public function toString(): string
     {
         return 'Accept-Ranges: ' . $this->getFieldValue();
     }

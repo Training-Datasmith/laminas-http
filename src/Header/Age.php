@@ -26,10 +26,9 @@ class Age implements HeaderInterface
      * Create Age header from string
      *
      * @param string $headerLine
-     * @return static
      * @throws Exception\InvalidArgumentException
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
 
@@ -51,20 +50,16 @@ class Age implements HeaderInterface
 
     /**
      * Get header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Age';
     }
 
     /**
      * Get header value (number of seconds)
-     *
-     * @return string
      */
-    public function getFieldValue()
+    public function getFieldValue(): string
     {
         return (string) $this->getDeltaSeconds();
     }
@@ -75,7 +70,7 @@ class Age implements HeaderInterface
      * @param int $delta
      * @return $this
      */
-    public function setDeltaSeconds($delta)
+    public function setDeltaSeconds($delta): static
     {
         if (! is_int($delta) && ! is_numeric($delta)) {
             throw new Exception\InvalidArgumentException('Invalid delta provided');
@@ -97,10 +92,8 @@ class Age implements HeaderInterface
     /**
      * Return header line
      * In case of overflow RFC states to set value of 2147483648 (2^31)
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Age: ' . ($this->deltaSeconds >= PHP_INT_MAX ? '2147483648' : $this->deltaSeconds);
     }

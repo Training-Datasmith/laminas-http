@@ -73,7 +73,7 @@ class Proxy extends Socket
      *
      * @param array $options
      */
-    public function setOptions($options = [])
+    public function setOptions($options = []): void
     {
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
@@ -86,8 +86,8 @@ class Proxy extends Socket
 
         //enforcing that the proxy keys are set in the form proxy_*
         foreach ($options as $k => $v) {
-            if (preg_match('/^proxy[a-z]+/', $k)) {
-                $options['proxy_' . substr($k, 5, strlen($k))] = $v;
+            if (preg_match('/^proxy[a-z]+/', (string) $k)) {
+                $options['proxy_' . substr((string) $k, 5, strlen((string) $k))] = $v;
                 unset($options[$k]);
             }
         }
@@ -106,7 +106,7 @@ class Proxy extends Socket
      * @param  bool $secure
      * @throws AdapterException\RuntimeException
      */
-    public function connect($host, $port = 80, $secure = false)
+    public function connect($host, $port = 80, $secure = false): void
     {
         // If no proxy is set, fall back to Socket adapter
         if (! $this->config['proxy_host']) {
@@ -123,8 +123,7 @@ class Proxy extends Socket
         // Connect (a non-secure connection) to the proxy server
         parent::connect(
             $this->config['proxy_host'],
-            $this->config['proxy_port'],
-            false
+            $this->config['proxy_port']
         );
     }
 
@@ -154,7 +153,7 @@ class Proxy extends Socket
         $host = $this->config['proxy_host'];
         $port = $this->config['proxy_port'];
 
-        $isSecure      = strtolower($uri->getScheme()) === 'https';
+        $isSecure      = strtolower((string) $uri->getScheme()) === 'https';
         $connectedHost = ($isSecure ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
 
         if ($this->connectedTo[1] !== $port || $this->connectedTo[0] !== $connectedHost) {
@@ -182,7 +181,7 @@ class Proxy extends Socket
         $this->method = $method;
 
         if ($uri->getUserInfo()) {
-            $headers['Authorization'] = 'Basic ' . base64_encode($uri->getUserInfo());
+            $headers['Authorization'] = 'Basic ' . base64_encode((string) $uri->getUserInfo());
         }
 
         $path  = $uri->getPath();
@@ -231,12 +230,10 @@ class Proxy extends Socket
     /**
      * Preform handshaking with HTTPS proxy using CONNECT method
      *
-     * @param string  $host
      * @param int $port
-     * @param string  $httpVer
      * @throws AdapterException\RuntimeException
      */
-    protected function connectHandshake($host, $port = 443, $httpVer = '1.1', array &$headers = [])
+    protected function connectHandshake(string $host, $port = 443, string $httpVer = '1.1', array &$headers = [])
     {
         $request = 'CONNECT ' . $host . ':' . $port . ' HTTP/' . $httpVer . "\r\n"
             . 'Host: ' . $host . "\r\n";
@@ -268,7 +265,7 @@ class Proxy extends Socket
         $gotStatus = false;
         ErrorHandler::start();
         while ($line = fgets($this->socket)) {
-            $gotStatus = $gotStatus || (strpos($line, 'HTTP') !== false);
+            $gotStatus = $gotStatus || (str_contains($line, 'HTTP'));
             if ($gotStatus) {
                 $response .= $line;
                 if (! rtrim($line)) {
@@ -304,7 +301,7 @@ class Proxy extends Socket
     /**
      * Close the connection to the server
      */
-    public function close()
+    public function close(): void
     {
         parent::close();
         $this->negotiated = false;

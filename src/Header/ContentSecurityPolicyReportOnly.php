@@ -11,10 +11,8 @@ class ContentSecurityPolicyReportOnly extends ContentSecurityPolicy
 {
     /**
      * Get the header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Content-Security-Policy-Report-Only';
     }

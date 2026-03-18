@@ -16,9 +16,8 @@ class From implements HeaderInterface
 
     /**
      * @param string $headerLine
-     * @return static
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
 
@@ -40,20 +39,17 @@ class From implements HeaderInterface
         }
     }
 
-    /** @return string */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'From';
     }
 
-    /** @return string */
-    public function getFieldValue()
+    public function getFieldValue(): string
     {
         return (string) $this->value;
     }
 
-    /** @return string */
-    public function toString()
+    public function toString(): string
     {
         return 'From: ' . $this->getFieldValue();
     }

@@ -23,9 +23,8 @@ class GenericHeader implements HeaderInterface
      * Factory to generate a header object from a string
      *
      * @param string $headerLine
-     * @return static
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         [$fieldName, $fieldValue] = self::splitHeaderLine($headerLine);
 
@@ -39,7 +38,7 @@ class GenericHeader implements HeaderInterface
      * @return string[] `name` in the first index and `value` in the second.
      * @throws Exception\InvalidArgumentException If header does not match with the format ``name:value``.
      */
-    public static function splitHeaderLine($headerLine)
+    public static function splitHeaderLine($headerLine): array
     {
         $parts = explode(':', $headerLine, 2);
         if (count($parts) !== 2) {
@@ -79,7 +78,7 @@ class GenericHeader implements HeaderInterface
      * @return $this
      * @throws Exception\InvalidArgumentException If the name does not match with RFC 2616 format.
      */
-    public function setFieldName($fieldName)
+    public function setFieldName($fieldName): static
     {
         if (! is_string($fieldName) || empty($fieldName)) {
             throw new Exception\InvalidArgumentException('Header name must be a string');
@@ -120,7 +119,7 @@ class GenericHeader implements HeaderInterface
      * @param  string $fieldValue
      * @return $this
      */
-    public function setFieldValue($fieldValue)
+    public function setFieldValue($fieldValue): static
     {
         $fieldValue = (string) $fieldValue;
         HeaderValue::assertValid($fieldValue);
@@ -147,10 +146,8 @@ class GenericHeader implements HeaderInterface
      * Cast to string as a well formed HTTP header line
      *
      * Returns in form of "NAME: VALUE\r\n"
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return $this->getFieldName() . ': ' . $this->getFieldValue();
     }

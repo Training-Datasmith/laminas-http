@@ -11,10 +11,8 @@ class Date extends AbstractDate
 {
     /**
      * Get header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Date';
     }

@@ -71,9 +71,9 @@ abstract class AbstractAccept implements HeaderInterface
      *
      * @param string $headerLine
      */
-    public function parseHeaderLine($headerLine)
+    public function parseHeaderLine($headerLine): void
     {
-        if (strpos($headerLine, ':') !== false) {
+        if (str_contains($headerLine, ':')) {
             [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
             if (strtolower($name) !== strtolower($this->getFieldName())) {
                 $value = $headerLine; // This is just for preserve the BC.
@@ -190,7 +190,7 @@ abstract class AbstractAccept implements HeaderInterface
                     $value = null;
                 }
 
-                if (isset($value[0]) && $value[0] === '"' && substr($value, -1) === '"') {
+                if (isset($value[0]) && $value[0] === '"' && str_ends_with($value, '"')) {
                     $value = substr(substr($value, 1), 0, -1);
                 }
 
@@ -216,7 +216,7 @@ abstract class AbstractAccept implements HeaderInterface
         $strings = [];
         foreach ($values as $value) {
             $params = $value->params;
-            array_walk($params, [$this, 'assembleAcceptParam']);
+            array_walk($params, $this->assembleAcceptParam(...));
             $strings[] = implode(';', [$value->typeString] + $params);
         }
 
@@ -228,28 +228,23 @@ abstract class AbstractAccept implements HeaderInterface
      *
      * @todo someone should review this thoroughly
      * @param string $value
-     * @param string $key
      * @return string
      */
-    protected function assembleAcceptParam(&$value, $key)
+    protected function assembleAcceptParam(&$value, string $key)
     {
         $separators = ['(', ')', '<', '>', '@', ',', ';', ':', '/', '[', ']', '?', '=', '{', '}', ' ', "\t"];
 
         $escaped = preg_replace_callback(
             '/[[:cntrl:]"\\\\]/', // escape cntrl, ", \
-            function ($v) {
-                return '\\' . $v[0];
-            },
+            fn($v) => '\\' . $v[0],
             $value
         );
 
         if ($escaped === $value && ! array_intersect(str_split($value), $separators)) {
-            $value = $key . ($value ? '=' . $value : '');
-        } else {
-            $value = $key . ($value ? '="' . $escaped . '"' : '');
+            return $key . ($value ? '=' . $value : '');
         }
 
-        return $value;
+        return $key . ($value ? '="' . $escaped . '"' : '');
     }
 
     /**
@@ -357,10 +352,10 @@ abstract class AbstractAccept implements HeaderInterface
     {
         foreach ($match2->params as $key => $value) {
             if (isset($match1->params[$key])) {
-                if (strpos($value, '-')) {
+                if (strpos((string) $value, '-')) {
                     preg_match(
                         '/^(?|([^"-]*)|"([^"]*)")-(?|([^"-]*)|"([^"]*)")\z/',
-                        $value,
+                        (string) $value,
                         $pieces
                     );
 
@@ -371,8 +366,8 @@ abstract class AbstractAccept implements HeaderInterface
                     ) {
                         return false;
                     }
-                } elseif (strpos($value, '|')) {
-                    $options = explode('|', $value);
+                } elseif (strpos((string) $value, '|')) {
+                    $options = explode('|', (string) $value);
                     $good    = false;
                     foreach ($options as $option) {
                         if ($option === $match1->params[$key]) {
@@ -430,7 +425,9 @@ abstract class AbstractAccept implements HeaderInterface
             // If A has higher precedence than B, return -1.
             if ($a->priority > $b->priority) {
                 return -1;
-            } elseif ($a->priority < $b->priority) {
+            }
+            // If A has higher precedence than B, return -1.
+            if ($a->priority < $b->priority) {
                 return 1;
             }
 
@@ -439,24 +436,19 @@ abstract class AbstractAccept implements HeaderInterface
             foreach ($values as $value) {
                 if ($a->$value === '*' && $b->$value !== '*') {
                     return 1;
-                } elseif ($b->$value === '*' && $a->$value !== '*') {
+                }
+                if ($b->$value === '*' && $a->$value !== '*') {
                     return -1;
                 }
             }
-
             if ($a->type === 'application' && $b->type !== 'application') {
                 return -1;
-            } elseif ($b->type === 'application' && $a->type !== 'application') {
+            }
+
+            if ($b->type === 'application' && $a->type !== 'application') {
                 return 1;
             }
-
-            // @todo count number of dots in case of type==application in subtype
-
-            // So far they're still the same. Longest string length may be more specific
-            if (strlen($a->raw) === strlen($b->raw)) {
-                return 0;
-            }
-            return strlen($a->raw) > strlen($b->raw) ? -1 : 1;
+            return strlen($b->raw) <=> strlen($a->raw);
         };
 
         usort($this->fieldValueParts, $sort);

@@ -43,10 +43,9 @@ class Allow implements HeaderInterface
      * Create Allow header from header line
      *
      * @param string $headerLine
-     * @return static
      * @throws Exception\InvalidArgumentException
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
 
@@ -64,20 +63,16 @@ class Allow implements HeaderInterface
 
     /**
      * Get header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Allow';
     }
 
     /**
      * Get comma-separated list of allowed methods
-     *
-     * @return string
      */
-    public function getFieldValue()
+    public function getFieldValue(): string
     {
         return implode(', ', array_keys($this->methods, true, true));
     }
@@ -94,10 +89,8 @@ class Allow implements HeaderInterface
 
     /**
      * Get list of allowed methods
-     *
-     * @return array
      */
-    public function getAllowedMethods()
+    public function getAllowedMethods(): array
     {
         return array_keys($this->methods, true, true);
     }
@@ -108,10 +101,10 @@ class Allow implements HeaderInterface
      * @param array|string $allowedMethods
      * @return $this
      */
-    public function allowMethods($allowedMethods)
+    public function allowMethods($allowedMethods): static
     {
         foreach ((array) $allowedMethods as $method) {
-            $method = trim(strtoupper($method));
+            $method = trim(strtoupper((string) $method));
             if (preg_match('/\s/', $method)) {
                 throw new Exception\InvalidArgumentException(sprintf(
                     'Unable to whitelist method; "%s" is not a valid method',
@@ -130,10 +123,10 @@ class Allow implements HeaderInterface
      * @param array|string $disallowedMethods
      * @return $this
      */
-    public function disallowMethods($disallowedMethods)
+    public function disallowMethods($disallowedMethods): static
     {
         foreach ((array) $disallowedMethods as $method) {
-            $method = trim(strtoupper($method));
+            $method = trim(strtoupper((string) $method));
             if (preg_match('/\s/', $method)) {
                 throw new Exception\InvalidArgumentException(sprintf(
                     'Unable to blacklist method; "%s" is not a valid method',
@@ -177,10 +170,8 @@ class Allow implements HeaderInterface
 
     /**
      * Return header as string
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Allow: ' . $this->getFieldValue();
     }

@@ -11,10 +11,8 @@ class IfUnmodifiedSince extends AbstractDate
 {
     /**
      * Get header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'If-Unmodified-Since';
     }

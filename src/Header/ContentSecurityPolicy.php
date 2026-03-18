@@ -94,7 +94,7 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
      * @return $this
      * @throws Exception\InvalidArgumentException If the name is not a valid directive name.
      */
-    public function setDirective($name, array $sources)
+    public function setDirective($name, array $sources): static
     {
         if (! in_array($name, $this->validDirectiveNames, true)) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -141,10 +141,9 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
      * Create Content Security Policy header from a given header line
      *
      * @param string $headerLine The header line to parse.
-     * @return static
      * @throws Exception\InvalidArgumentException If the name field in the given header line does not match.
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         $header         = new static();
         $headerName     = $header->getFieldName();
@@ -176,20 +175,16 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
 
     /**
      * Get the header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Content-Security-Policy';
     }
 
     /**
      * Get the header value
-     *
-     * @return string
      */
-    public function getFieldValue()
+    public function getFieldValue(): string
     {
         $directives = [];
         foreach ($this->directives as $name => $value) {
@@ -200,16 +195,13 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
 
     /**
      * Return the header as a string
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return sprintf('%s: %s', $this->getFieldName(), $this->getFieldValue());
     }
 
-    /** @return string */
-    public function toStringMultipleHeaders(array $headers)
+    public function toStringMultipleHeaders(array $headers): string
     {
         $strings = [$this->toString()];
         foreach ($headers as $header) {

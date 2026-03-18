@@ -24,10 +24,9 @@ class Connection implements HeaderInterface
 
     /**
      * @param string $headerLine
-     * @return static
      * @throws Exception\InvalidArgumentException
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         $header = new static();
 
@@ -49,7 +48,7 @@ class Connection implements HeaderInterface
      * @param  bool $flag
      * @return $this
      */
-    public function setPersistent($flag)
+    public function setPersistent($flag): static
     {
         $this->value = (bool) $flag
             ? self::CONNECTION_KEEP_ALIVE
@@ -59,10 +58,8 @@ class Connection implements HeaderInterface
 
     /**
      * Get whether this connection is persistent
-     *
-     * @return bool
      */
-    public function isPersistent()
+    public function isPersistent(): bool
     {
         return $this->value === self::CONNECTION_KEEP_ALIVE;
     }
@@ -74,7 +71,7 @@ class Connection implements HeaderInterface
      * @param string $value
      * @return $this
      */
-    public function setValue($value)
+    public function setValue($value): static
     {
         HeaderValue::assertValid($value);
         $this->value = strtolower($value);
@@ -83,10 +80,8 @@ class Connection implements HeaderInterface
 
     /**
      * Connection header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Connection';
     }
@@ -103,10 +98,8 @@ class Connection implements HeaderInterface
 
     /**
      * Return header line
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Connection: ' . $this->getFieldValue();
     }

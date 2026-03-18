@@ -28,9 +28,6 @@ use function trim;
  */
 class ContentType implements HeaderInterface
 {
-    /** @var string */
-    protected $mediaType;
-
     /** @var array */
     protected $parameters = [];
 
@@ -41,9 +38,8 @@ class ContentType implements HeaderInterface
      * Factory method: create an object from a string representation
      *
      * @param  string $headerLine
-     * @return static
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
 
@@ -78,13 +74,12 @@ class ContentType implements HeaderInterface
      * @param null|string $value
      * @param null|string $mediaType
      */
-    public function __construct($value = null, $mediaType = null)
+    public function __construct($value = null, protected $mediaType = null)
     {
         if ($value !== null) {
             HeaderValue::assertValid($value);
             $this->value = $value;
         }
-        $this->mediaType = $mediaType;
     }
 
     /**
@@ -103,7 +98,7 @@ class ContentType implements HeaderInterface
         $left      = $this->getMediaTypeObjectFromString($mediaType);
 
         foreach ($matchAgainst as $matchType) {
-            $matchType = strtolower($matchType);
+            $matchType = strtolower((string) $matchType);
 
             if ($mediaType === $matchType) {
                 return $matchType;
@@ -131,20 +126,16 @@ class ContentType implements HeaderInterface
 
     /**
      * Create a string representation of the header
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Content-Type: ' . $this->getFieldValue();
     }
 
     /**
      * Get the field name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Content-Type';
     }
@@ -168,7 +159,7 @@ class ContentType implements HeaderInterface
      * @param  string $mediaType
      * @return $this
      */
-    public function setMediaType($mediaType)
+    public function setMediaType($mediaType): static
     {
         HeaderValue::assertValid($mediaType);
         $this->mediaType = strtolower($mediaType);
@@ -178,10 +169,8 @@ class ContentType implements HeaderInterface
 
     /**
      * Get the media type
-     *
-     * @return string
      */
-    public function getMediaType()
+    public function getMediaType(): string
     {
         return (string) $this->mediaType;
     }
@@ -191,7 +180,7 @@ class ContentType implements HeaderInterface
      *
      * @return $this
      */
-    public function setParameters(array $parameters)
+    public function setParameters(array $parameters): static
     {
         foreach ($parameters as $key => $value) {
             HeaderValue::assertValid($key);
@@ -218,7 +207,7 @@ class ContentType implements HeaderInterface
      * @param  string $charset
      * @return $this
      */
-    public function setCharset($charset)
+    public function setCharset($charset): static
     {
         HeaderValue::assertValid($charset);
         $this->parameters['charset'] = $charset;
@@ -233,10 +222,7 @@ class ContentType implements HeaderInterface
      */
     public function getCharset()
     {
-        if (isset($this->parameters['charset'])) {
-            return $this->parameters['charset'];
-        }
-        return null;
+        return $this->parameters['charset'] ?? null;
     }
 
     /**
@@ -263,14 +249,13 @@ class ContentType implements HeaderInterface
      * Split comma-separated media types into an array
      *
      * @param  string $criteria
-     * @return array
      */
-    protected function splitMediaTypesFromString($criteria)
+    protected function splitMediaTypesFromString($criteria): array
     {
         $mediaTypes = explode(',', $criteria);
         array_walk(
             $mediaTypes,
-            function (&$value) {
+            function (&$value): void {
                 $value = trim($value);
             }
         );
@@ -293,7 +278,7 @@ class ContentType implements HeaderInterface
         if (! is_string($string)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Non-string mediatype "%s" provided',
-                is_object($string) ? $string::class : gettype($string)
+                get_debug_type($string)
             ));
         }
 
@@ -308,8 +293,8 @@ class ContentType implements HeaderInterface
         $type    = array_shift($parts);
         $subtype = array_shift($parts);
         $format  = $subtype;
-        if (false !== strpos($subtype, '+')) {
-            $parts   = explode('+', $subtype, 2);
+        if (str_contains((string) $subtype, '+')) {
+            $parts   = explode('+', (string) $subtype, 2);
             $subtype = array_shift($parts);
             $format  = array_shift($parts);
         }
@@ -341,7 +326,7 @@ class ContentType implements HeaderInterface
         }
 
         // Is the right side a partial wildcard?
-        if ('*' === substr($right->subtype, -1)) {
+        if (str_ends_with((string) $right->subtype, '*')) {
             // validate partial-wildcard subtype
             if (! $this->validatePartialWildcard($right->subtype, $left->subtype)) {
                 return false;
@@ -366,9 +351,8 @@ class ContentType implements HeaderInterface
      *
      * @param  string $right
      * @param  string $left
-     * @return bool
      */
-    protected function validateFormat($right, $left)
+    protected function validateFormat($right, $left): bool
     {
         if ($right->format && $left->format) {
             if ($right->format === '*') {
@@ -388,9 +372,8 @@ class ContentType implements HeaderInterface
      *
      * @param  string $right
      * @param  string $left
-     * @return bool
      */
-    protected function validatePartialWildcard($right, $left)
+    protected function validatePartialWildcard($right, $left): bool
     {
         $requiredSegment = substr($right, 0, strlen($right) - 1);
         if ($requiredSegment === $left) {
@@ -401,7 +384,7 @@ class ContentType implements HeaderInterface
             return false;
         }
 
-        if (0 === strpos($left, $requiredSegment)) {
+        if (str_starts_with($left, $requiredSegment)) {
             return true;
         }
 

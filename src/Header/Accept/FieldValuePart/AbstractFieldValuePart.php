@@ -12,13 +12,6 @@ use stdClass;
 abstract class AbstractFieldValuePart
 {
     /**
-     * Internal object used for value retrieval
-     *
-     * @var object
-     */
-    private $internalValues;
-
-    /**
      * A Field Value Part this Field Value Part matched against.
      *
      * @var AbstractFieldValuePart
@@ -28,9 +21,13 @@ abstract class AbstractFieldValuePart
     /**
      * @param object $internalValues
      */
-    public function __construct($internalValues)
+    public function __construct(
+        /**
+         * Internal object used for value retrieval
+         */
+        private $internalValues
+    )
     {
-        $this->internalValues = $internalValues;
     }
 
     /**
@@ -96,9 +93,8 @@ abstract class AbstractFieldValuePart
 
     /**
      * @param mixed $key
-     * @return mixed
      */
-    public function __get($key)
+    public function __get(string $key): mixed
     {
         return $this->getInternalValues()->$key;
     }

@@ -204,7 +204,7 @@ class Request extends AbstractMessage implements RequestInterface
                 $uri = new HttpUri($uri);
             } catch (UriException\InvalidUriPartException $e) {
                 throw new Exception\InvalidArgumentException(
-                    sprintf('Invalid URI passed as string (%s)', (string) $uri),
+                    sprintf('Invalid URI passed as string (%s)', $uri),
                     $e->getCode(),
                     $e
                 );
@@ -524,7 +524,7 @@ class Request extends AbstractMessage implements RequestInterface
      */
     public function renderRequestLine()
     {
-        return $this->method . ' ' . (string) $this->uri . ' HTTP/' . $this->version;
+        return $this->method . ' ' . $this->uri . ' HTTP/' . $this->version;
     }
 
     /**
@@ -535,8 +535,7 @@ class Request extends AbstractMessage implements RequestInterface
         $str  = $this->renderRequestLine() . "\r\n";
         $str .= $this->getHeaders()->toString();
         $str .= "\r\n";
-        $str .= $this->getContent();
-        return $str;
+        return $str . $this->getContent();
     }
 
     /**
@@ -550,7 +549,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * @param bool $strictMethods
      */
-    public function setAllowCustomMethods($strictMethods)
+    public function setAllowCustomMethods($strictMethods): void
     {
         $this->allowCustomMethods = (bool) $strictMethods;
     }

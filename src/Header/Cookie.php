@@ -20,16 +20,15 @@ use function urlencode;
  * @see http://www.ietf.org/rfc/rfc2109.txt
  * @see http://www.w3.org/Protocols/rfc2109/rfc2109
  */
-class Cookie extends ArrayObject implements HeaderInterface
+class Cookie extends ArrayObject implements HeaderInterface, \Stringable
 {
     /** @var bool */
     protected $encodeValue = true;
 
     /**
      * @param SetCookie[] $setCookieClass
-     * @return static
      */
-    public static function fromSetCookieArray(array $setCookies)
+    public static function fromSetCookieArray(array $setCookies): static
     {
         $nvPairs = [];
 
@@ -56,9 +55,8 @@ class Cookie extends ArrayObject implements HeaderInterface
 
     /**
      * @param string $headerLine
-     * @return static
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         $header = new static();
 
@@ -95,7 +93,7 @@ class Cookie extends ArrayObject implements HeaderInterface
      * @param bool $encodeValue
      * @return $this
      */
-    public function setEncodeValue($encodeValue)
+    public function setEncodeValue($encodeValue): static
     {
         $this->encodeValue = (bool) $encodeValue;
         return $this;
@@ -109,14 +107,12 @@ class Cookie extends ArrayObject implements HeaderInterface
         return $this->encodeValue;
     }
 
-    /** @return string */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Cookie';
     }
 
-    /** @return string */
-    public function getFieldValue()
+    public function getFieldValue(): string
     {
         $nvPairs = [];
 
@@ -132,7 +128,7 @@ class Cookie extends ArrayObject implements HeaderInterface
      * @param null|string $prefix
      * @return array<string, string>
      */
-    protected function flattenCookies($data, $prefix = null)
+    protected function flattenCookies($data, $prefix = null): array
     {
         $result = [];
         foreach ($data as $key => $value) {
@@ -147,8 +143,7 @@ class Cookie extends ArrayObject implements HeaderInterface
         return $result;
     }
 
-    /** @return string */
-    public function toString()
+    public function toString(): string
     {
         return 'Cookie: ' . $this->getFieldValue();
     }
@@ -156,10 +151,8 @@ class Cookie extends ArrayObject implements HeaderInterface
     /**
      * Get the cookie as a string, suitable for sending as a "Cookie" header in an
      * HTTP request
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toString();
     }

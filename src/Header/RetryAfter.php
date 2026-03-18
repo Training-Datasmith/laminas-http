@@ -24,10 +24,9 @@ class RetryAfter extends AbstractDate
      * Create Retry-After header from string
      *
      * @param  string $headerLine
-     * @return static
      * @throws Exception\InvalidArgumentException
      */
-    public static function fromString($headerLine)
+    public static function fromString($headerLine): static
     {
         $dateHeader = new static();
 
@@ -55,7 +54,7 @@ class RetryAfter extends AbstractDate
      * @param int $delta
      * @return $this
      */
-    public function setDeltaSeconds($delta)
+    public function setDeltaSeconds($delta): static
     {
         $this->deltaSeconds = (int) $delta;
         return $this;
@@ -73,10 +72,8 @@ class RetryAfter extends AbstractDate
 
     /**
      * Get header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Retry-After';
     }
@@ -93,10 +90,8 @@ class RetryAfter extends AbstractDate
 
     /**
      * Return header line
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Retry-After: ' . $this->getFieldValue();
     }

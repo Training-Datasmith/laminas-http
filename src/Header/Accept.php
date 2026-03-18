@@ -20,20 +20,16 @@ class Accept extends AbstractAccept
 
     /**
      * Get field name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Accept';
     }
 
     /**
      * Cast to string
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Accept: ' . $this->getFieldValue();
     }
@@ -67,9 +63,8 @@ class Accept extends AbstractAccept
      * @see    \Laminas\Http\Header\AbstractAccept::parseFieldValuePart()
      *
      * @param  string $fieldValuePart
-     * @return FieldValuePart\AcceptFieldValuePart
      */
-    protected function parseFieldValuePart($fieldValuePart)
+    protected function parseFieldValuePart($fieldValuePart): \Laminas\Http\Header\Accept\FieldValuePart\AcceptFieldValuePart
     {
         $raw = $fieldValuePart;
         if ($pos = strpos($fieldValuePart, '/')) {

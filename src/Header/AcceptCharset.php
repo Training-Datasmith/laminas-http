@@ -17,20 +17,16 @@ class AcceptCharset extends AbstractAccept
 
     /**
      * Get field name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Accept-Charset';
     }
 
     /**
      * Cast to string
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Accept-Charset: ' . $this->getFieldValue();
     }
@@ -64,9 +60,8 @@ class AcceptCharset extends AbstractAccept
      * @see \Laminas\Http\Header\AbstractAccept::parseFieldValuePart()
      *
      * @param string $fieldValuePart
-     * @return CharsetFieldValuePart
      */
-    protected function parseFieldValuePart($fieldValuePart)
+    protected function parseFieldValuePart($fieldValuePart): \Laminas\Http\Header\Accept\FieldValuePart\CharsetFieldValuePart
     {
         $internalValues = parent::parseFieldValuePart($fieldValuePart);
 

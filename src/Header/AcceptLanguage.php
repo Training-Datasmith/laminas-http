@@ -21,20 +21,16 @@ class AcceptLanguage extends AbstractAccept
 
     /**
      * Get field name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Accept-Language';
     }
 
     /**
      * Cast to string
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'Accept-Language: ' . $this->getFieldValue();
     }
@@ -68,9 +64,8 @@ class AcceptLanguage extends AbstractAccept
      * @see \Laminas\Http\Header\AbstractAccept::parseFieldValuePart()
      *
      * @param string $fieldValuePart
-     * @return LanguageFieldValuePart
      */
-    protected function parseFieldValuePart($fieldValuePart)
+    protected function parseFieldValuePart($fieldValuePart): \Laminas\Http\Header\Accept\FieldValuePart\LanguageFieldValuePart
     {
         $raw = $fieldValuePart;
         if ($pos = strpos($fieldValuePart, '-')) {

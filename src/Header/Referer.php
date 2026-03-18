@@ -18,7 +18,7 @@ class Referer extends AbstractLocation
      * @param  string|HttpUri $uri
      * @return $this
      */
-    public function setUri($uri)
+    public function setUri($uri): static
     {
         parent::setUri($uri);
         $this->uri->setFragment(null);
@@ -28,10 +28,8 @@ class Referer extends AbstractLocation
 
     /**
      * Return header name
-     *
-     * @return string
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return 'Referer';
     }
