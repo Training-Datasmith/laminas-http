@@ -1,27 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Response;
+
+use function array_shift;
+
+use const E_WARNING;
+
+use function explode;
+use function fgets;
+
+use function file_exists;
+use function get_resource_type;
+use function implode;
+use function is_resource;
+use function is_string;
 
 use Laminas\Http\Exception;
 use Laminas\Http\Header\ContentLength;
 use Laminas\Http\Response;
 use Laminas\Stdlib\ErrorHandler;
 
-use function array_shift;
-use function explode;
-use function fgets;
-use function file_exists;
-use function get_resource_type;
-use function implode;
-use function is_resource;
-use function is_string;
 use function sprintf;
 use function stream_get_contents;
 use function strlen;
 use function trim;
-use function unlink;
 
-use const E_WARNING;
+use function unlink;
 
 /**
  * Represents an HTTP response message as PHP stream resource

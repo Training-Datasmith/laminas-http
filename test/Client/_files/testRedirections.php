@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 if (! isset($_GET['redirection'])) {
     $_GET['redirection'] = 0;
 

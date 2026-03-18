@@ -1,22 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http;
 
+use function array_key_exists;
+use function array_shift;
+
 use ArrayIterator;
+
+use function defined;
+use function explode;
+use function implode;
+use function is_string;
+
 use Laminas\Http\Header\HeaderInterface;
-use Laminas\Http\Headers;
 use Laminas\Stdlib\Parameters;
 use Laminas\Stdlib\ParametersInterface;
 use Laminas\Stdlib\RequestInterface;
 use Laminas\Uri\Exception as UriException;
 use Laminas\Uri\Http as HttpUri;
 
-use function array_key_exists;
-use function array_shift;
-use function defined;
-use function explode;
-use function implode;
-use function is_string;
 use function parse_str;
 use function parse_url;
 use function preg_match;

@@ -1,44 +1,24 @@
 <?php
 
-namespace Laminas\Http\Client\Adapter;
+declare(strict_types=1);
 
-use Laminas\Http\Client\Adapter\AdapterInterface as HttpAdapter;
-use Laminas\Http\Client\Adapter\Exception as AdapterException;
-use Laminas\Stdlib\ArrayUtils;
-use Laminas\Uri\Uri;
-use Traversable;
+namespace Laminas\Http\Client\Adapter;
 
 use function array_key_exists;
 use function base64_decode;
 use function curl_close;
 use function curl_errno;
 use function curl_error;
+
 use function curl_exec;
 use function curl_getinfo;
-use function curl_init;
-use function curl_setopt;
-use function defined;
-use function extension_loaded;
-use function gettype;
-use function in_array;
-use function intval;
-use function is_array;
-use function is_float;
-use function is_numeric;
-use function is_resource;
-use function number_format;
-use function preg_match;
-use function preg_replace;
-use function preg_split;
-use function sprintf;
-use function str_replace;
-use function strlen;
-use function strtolower;
-use function substr;
-use function substr_replace;
 
 use const CURL_HTTP_VERSION_1_0;
 use const CURL_HTTP_VERSION_1_1;
+
+use function curl_init;
+use function curl_setopt;
+
 use const CURLAUTH_BASIC;
 use const CURLINFO_HEADER_OUT;
 use const CURLINFO_HEADER_SIZE;
@@ -61,6 +41,7 @@ use const CURLOPT_MAXREDIRS;
 use const CURLOPT_NOBODY;
 use const CURLOPT_PORT;
 use const CURLOPT_POST;
+
 use const CURLOPT_POSTFIELDS;
 use const CURLOPT_PROXY;
 use const CURLOPT_PROXYPORT;
@@ -74,6 +55,34 @@ use const CURLOPT_TIMEOUT_MS;
 use const CURLOPT_UPLOAD;
 use const CURLOPT_URL;
 use const CURLOPT_USERPWD;
+
+use function defined;
+use function extension_loaded;
+use function gettype;
+use function in_array;
+use function intval;
+use function is_array;
+use function is_float;
+use function is_numeric;
+use function is_resource;
+
+use Laminas\Http\Client\Adapter\AdapterInterface as HttpAdapter;
+use Laminas\Http\Client\Adapter\Exception as AdapterException;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Uri\Uri;
+
+use function number_format;
+use function preg_match;
+use function preg_replace;
+use function preg_split;
+use function sprintf;
+use function str_replace;
+use function strlen;
+use function strtolower;
+use function substr;
+use function substr_replace;
+
+use Traversable;
 
 /**
  * An adapter class for Laminas\Http\Client based on the curl extension.

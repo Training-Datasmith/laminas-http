@@ -1,4 +1,6 @@
 <?php
 
+declare(strict_types=1);
+
 echo serialize($_GET);
 readfile('php://input');

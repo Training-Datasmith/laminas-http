@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 if (! empty($_FILES)) {
     foreach ($_FILES as $name => $file) {
         if (is_array($file['name'])) {

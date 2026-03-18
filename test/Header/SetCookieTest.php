@@ -5,24 +5,28 @@ declare(strict_types=1);
 namespace LaminasTest\Http\Header;
 
 use DateTime;
+
+use function gmdate;
+use function json_encode;
+
 use Laminas\Http\Header\Exception\InvalidArgumentException;
 use Laminas\Http\Header\HeaderInterface;
 use Laminas\Http\Header\MultipleHeaderInterface;
 use Laminas\Http\Header\SetCookie;
+
+use const PHP_INT_SIZE;
+
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-use function gmdate;
-use function json_encode;
 use function sprintf;
 use function strtolower;
 use function strtotime;
 use function strtoupper;
 use function time;
-use function urlencode;
 
-use const PHP_INT_SIZE;
+use function urlencode;
 
 class SetCookieTest extends TestCase
 {

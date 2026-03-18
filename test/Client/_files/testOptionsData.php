@@ -1,3 +1,5 @@
 <?php
 
-readfile("php://input");
+declare(strict_types=1);
+
+readfile('php://input');

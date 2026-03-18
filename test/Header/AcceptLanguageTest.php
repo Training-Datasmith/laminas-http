@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http\Header;
 
+use function array_shift;
+
 use Laminas\Http\Header\AcceptLanguage;
 use Laminas\Http\Header\Exception\InvalidArgumentException;
 use Laminas\Http\Header\HeaderInterface;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 
-use function array_shift;
+use PHPUnit\Framework\TestCase;
 
 class AcceptLanguageTest extends TestCase
 {

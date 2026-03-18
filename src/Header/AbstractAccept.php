@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Header;
 
-use stdClass;
-
 use function array_intersect;
+
 use function array_shift;
 use function array_walk;
 use function count;
@@ -18,6 +19,9 @@ use function preg_match;
 use function preg_match_all;
 use function preg_replace_callback;
 use function sprintf;
+
+use stdClass;
+
 use function str_split;
 use function stripslashes;
 use function strlen;
@@ -236,7 +240,7 @@ abstract class AbstractAccept implements HeaderInterface
 
         $escaped = preg_replace_callback(
             '/[[:cntrl:]"\\\\]/', // escape cntrl, ", \
-            fn($v) => '\\' . $v[0],
+            fn ($v) => '\\' . $v[0],
             $value
         );
 

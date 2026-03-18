@@ -1,14 +1,8 @@
 <?php
 
-namespace Laminas\Http\Client\Adapter;
+declare(strict_types=1);
 
-use Laminas\Http\Client;
-use Laminas\Http\Client\Adapter\Exception as AdapterException;
-use Laminas\Http\Response;
-use Laminas\Stdlib\ArrayUtils;
-use Laminas\Stdlib\ErrorHandler;
-use Laminas\Uri\Uri;
-use Traversable;
+namespace Laminas\Http\Client\Adapter;
 
 use function base64_encode;
 use function fgets;
@@ -17,15 +11,24 @@ use function gettype;
 use function is_array;
 use function is_resource;
 use function is_string;
+
+use Laminas\Http\Client;
+use Laminas\Http\Client\Adapter\Exception as AdapterException;
+use Laminas\Http\Response;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Stdlib\ErrorHandler;
+use Laminas\Uri\Uri;
+
 use function preg_match;
 use function rtrim;
 use function sprintf;
 use function stream_context_set_option;
 use function stream_copy_to_stream;
 use function strlen;
-use function strpos;
 use function strtolower;
 use function substr;
+
+use Traversable;
 
 /**
  * HTTP Proxy-supporting Laminas\Http\Client adapter class, based on the default

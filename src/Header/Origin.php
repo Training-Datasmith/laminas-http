@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Header;
+
+use function explode;
 
 use Laminas\Uri\UriFactory;
 
-use function explode;
 use function strtolower;
 
 /**

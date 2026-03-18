@@ -1,8 +1,19 @@
-<?php // phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCaps
+<?php
+
+declare(strict_types=1);
+// phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCaps
 
 namespace LaminasTest\Http;
 
 use ArrayIterator;
+
+use function base64_encode;
+use function count;
+use function file_get_contents;
+use function ini_get;
+use function ini_set;
+use function json_encode;
+
 use Laminas\Http\Client;
 use Laminas\Http\Client\Adapter\AdapterInterface;
 use Laminas\Http\Client\Adapter\Curl;
@@ -17,6 +28,7 @@ use Laminas\Http\Header\SetCookie;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Uri\Http;
+
 use LaminasTest\Http\TestAsset\ExtendedClient;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -24,12 +36,6 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
 
-use function base64_encode;
-use function count;
-use function file_get_contents;
-use function ini_get;
-use function ini_set;
-use function json_encode;
 use function strlen;
 use function sys_get_temp_dir;
 use function tempnam;

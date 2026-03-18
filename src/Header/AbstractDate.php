@@ -1,14 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Header;
 
 use DateTime;
 use DateTimeZone;
 use Exception;
-use Laminas\Http\Header\Exception\InvalidArgumentException;
 
 use function is_numeric;
+
 use function is_string;
+
+use Laminas\Http\Header\Exception\InvalidArgumentException;
+
 use function sprintf;
 use function strtolower;
 use function strtotime;

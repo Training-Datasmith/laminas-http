@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http\Client;
 
-use Laminas\Http\Client as HTTPClient;
+use const FILTER_VALIDATE_BOOLEAN;
+
+use function filter_var;
+use function getenv;
+
 use Laminas\Http\Client\Adapter\AdapterInterface;
 use Laminas\Http\Client\Adapter\Socket;
+use Laminas\Http\Client as HTTPClient;
+
 use Laminas\Http\Request;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-use function filter_var;
-use function getenv;
 use function sprintf;
-
-use const FILTER_VALIDATE_BOOLEAN;
 
 /**
  * This are the test for the prototype of Laminas\Http\Client
@@ -77,7 +79,7 @@ class UseCaseTest extends TestCase
     public function testStaticHttpGet(): void
     {
         //        $response= HTTPClient::get($this->baseuri);
-//        $this->assertTrue($response->isSuccess());
+        //        $this->assertTrue($response->isSuccess());
     }
 
     public function testRequestHttpGet(): void

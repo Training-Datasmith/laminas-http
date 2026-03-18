@@ -1,17 +1,21 @@
 <?php
 
-namespace Laminas\Http;
+declare(strict_types=1);
 
-use ArrayIterator;
-use Laminas\Http\Header\SetCookie;
-use Laminas\Http\Headers;
-use Laminas\Uri;
+namespace Laminas\Http;
 
 use function array_keys;
 use function array_merge;
+
+use ArrayIterator;
+
 use function count;
 use function is_array;
 use function is_string;
+
+use Laminas\Http\Header\SetCookie;
+use Laminas\Uri;
+
 use function sprintf;
 use function strrpos;
 use function substr;

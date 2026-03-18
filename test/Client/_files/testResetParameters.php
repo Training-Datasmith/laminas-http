@@ -1,3 +1,5 @@
 <?php
 
+declare(strict_types=1);
+
 echo serialize($_GET) . "\n" . serialize($_POST);

@@ -1,12 +1,12 @@
 <?php
 
-namespace Laminas\Http;
+declare(strict_types=1);
 
-use Laminas\Stdlib\ErrorHandler;
-use Laminas\Stdlib\ResponseInterface;
+namespace Laminas\Http;
 
 use function array_shift;
 use function count;
+
 use function explode;
 use function function_exists;
 use function gettype;
@@ -16,10 +16,13 @@ use function gzuncompress;
 use function hexdec;
 use function implode;
 use function in_array;
-use function is_array;
 use function is_float;
 use function is_numeric;
 use function is_scalar;
+
+use Laminas\Stdlib\ErrorHandler;
+use Laminas\Stdlib\ResponseInterface;
+
 use function ord;
 use function preg_match;
 use function sprintf;

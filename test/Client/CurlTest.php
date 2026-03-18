@@ -5,28 +5,9 @@ declare(strict_types=1);
 namespace LaminasTest\Http\Client;
 
 use ArrayObject;
-use Exception;
-use Laminas\Http\Client;
-use Laminas\Http\Client\Adapter;
-use Laminas\Http\Client\Adapter\Curl;
-use Laminas\Http\Client\Adapter\Exception\InvalidArgumentException;
-use Laminas\Http\Client\Adapter\Exception\RuntimeException;
-use Laminas\Http\Client\Adapter\Exception\TimeoutException;
-use Laminas\Stdlib\ErrorHandler;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use ValueError;
 
 use function base64_encode;
 use function curl_getinfo;
-use function explode;
-use function file_get_contents;
-use function filesize;
-use function fopen;
-use function getenv;
-use function gzcompress;
-use function strstr;
-use function trim;
 
 use const CURLOPT_ENCODING;
 use const CURLOPT_FOLLOWLOCATION;
@@ -37,10 +18,38 @@ use const CURLOPT_PROXY;
 use const CURLOPT_PROXYPORT;
 use const CURLOPT_PROXYUSERPWD;
 use const CURLOPT_SSL_VERIFYPEER;
+
 use const CURLOPT_TIMEOUT;
 use const DIRECTORY_SEPARATOR;
+
+use Exception;
+
+use function explode;
+use function file_get_contents;
+use function filesize;
+use function fopen;
+use function getenv;
+use function gzcompress;
+
+use Laminas\Http\Client;
+
+use Laminas\Http\Client\Adapter;
+use Laminas\Http\Client\Adapter\Curl;
+use Laminas\Http\Client\Adapter\Exception\InvalidArgumentException;
+use Laminas\Http\Client\Adapter\Exception\RuntimeException;
+use Laminas\Http\Client\Adapter\Exception\TimeoutException;
+use Laminas\Stdlib\ErrorHandler;
+
 use const PHP_INT_MAX;
 use const PHP_VERSION_ID;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+
+use function strstr;
+use function trim;
+
+use ValueError;
 
 /**
  * This Testsuite includes all Laminas_Http_Client that require a working web

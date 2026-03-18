@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http\Header;
 
+use function implode;
+
 use Laminas\Http\Header\ContentType;
 use Laminas\Http\Header\Exception\InvalidArgumentException;
 use Laminas\Http\Header\HeaderInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+
 use PHPUnit\Framework\TestCase;
 
-use function implode;
 use function strtolower;
 
 class ContentTypeTest extends TestCase

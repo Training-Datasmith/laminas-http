@@ -7,10 +7,12 @@ namespace LaminasTest\Http\Header;
 use Laminas\Http\Header\Age;
 use Laminas\Http\Header\Exception\InvalidArgumentException;
 use Laminas\Http\Header\HeaderInterface;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 
 use const PHP_INT_MAX;
+
+use PHPUnit\Framework\Attributes\Group;
+
+use PHPUnit\Framework\TestCase;
 
 class AgeTest extends TestCase
 {

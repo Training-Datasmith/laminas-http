@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 $user   = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : null;
 $pass   = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : null;
 $guser  = isset($_GET['user']) ? $_GET['user'] : null;

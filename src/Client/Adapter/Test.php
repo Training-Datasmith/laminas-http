@@ -1,17 +1,21 @@
 <?php
 
-namespace Laminas\Http\Client\Adapter;
+declare(strict_types=1);
 
-use Laminas\Http\Response;
-use Laminas\Stdlib\ArrayUtils;
-use Laminas\Uri\Uri;
-use Traversable;
+namespace Laminas\Http\Client\Adapter;
 
 use function count;
 use function gettype;
 use function is_array;
 use function is_string;
+
+use Laminas\Http\Response;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Uri\Uri;
+
 use function strtolower;
+
+use Traversable;
 
 /**
  * A testing-purposes adapter.

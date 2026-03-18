@@ -4,11 +4,28 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http\Client;
 
+use function array_shift;
+
 use ArrayObject;
-use Laminas\Http\Client as HTTPClient;
+
+use function count;
+
+use const DIRECTORY_SEPARATOR;
+
+use function explode;
+use function fclose;
+use function file;
+use function file_get_contents;
+use function filesize;
+use function getenv;
+use function gettype;
+use function is_file;
+
 use Laminas\Http\Client\Adapter\Exception as ClientAdapterException;
 use Laminas\Http\Client\Adapter\Test;
+use Laminas\Http\Client as HTTPClient;
 use Laminas\Http\Client\Exception as ClientException;
+
 use Laminas\Http\Exception\InvalidArgumentException;
 use Laminas\Http\Exception\RuntimeException;
 use Laminas\Http\Header\SetCookie;
@@ -19,28 +36,19 @@ use LaminasTest\Http\Client\TestAsset\MockClient;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
-use function array_shift;
-use function count;
-use function explode;
-use function fclose;
-use function file;
-use function file_get_contents;
-use function filesize;
-use function getenv;
-use function gettype;
-use function is_file;
 use function preg_match;
 use function realpath;
 use function sprintf;
+
+use stdClass;
+
 use function sys_get_temp_dir;
 use function tempnam;
 use function trim;
 use function unlink;
-use function urlencode;
 
-use const DIRECTORY_SEPARATOR;
+use function urlencode;
 
 /**
  * This Testsuite includes all Laminas_Http_Client tests that do not rely

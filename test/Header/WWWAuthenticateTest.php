@@ -1,4 +1,7 @@
-<?php // phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCaps
+<?php
+
+declare(strict_types=1);
+// phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCaps
 
 namespace LaminasTest\Http\Header;
 

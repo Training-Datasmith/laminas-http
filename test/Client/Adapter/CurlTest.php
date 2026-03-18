@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http\Client\Adapter;
 
-use Laminas\Http\Client\Adapter\Curl;
-use Laminas\Uri\Uri;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
-
 use function curl_getinfo;
 
 use const CURL_HTTP_VERSION_1_0;
 use const CURL_HTTP_VERSION_1_1;
 use const CURLINFO_HTTP_VERSION;
+
+use Laminas\Http\Client\Adapter\Curl;
+
+use Laminas\Uri\Uri;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 final class CurlTest extends TestCase
 {

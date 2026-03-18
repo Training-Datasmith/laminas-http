@@ -9,12 +9,14 @@ use DateTimeZone;
 use Laminas\Http\Header\Date;
 use Laminas\Http\Header\Exception\InvalidArgumentException;
 use Laminas\Http\Header\HeaderInterface;
+
+use const PHP_VERSION_ID;
+
 use PHPUnit\Framework\Attributes\Group;
+
 use PHPUnit\Framework\TestCase;
 
 use function time;
-
-use const PHP_VERSION_ID;
 
 class DateTest extends TestCase
 {

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Header;
 
 use Laminas\Http\Header\Accept\FieldValuePart;
-use Laminas\Http\Header\Accept\FieldValuePart\EncodingFieldValuePart;
 
 /**
  * Accept Encoding Header

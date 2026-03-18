@@ -1,13 +1,16 @@
 <?php
 
-namespace Laminas\Http\PhpEnvironment;
+declare(strict_types=1);
 
-use Laminas\Http\Header\HeaderInterface;
-use Laminas\Http\Header\MultipleHeaderInterface;
-use Laminas\Http\Response as HttpResponse;
+namespace Laminas\Http\PhpEnvironment;
 
 use function call_user_func;
 use function header;
+
+use Laminas\Http\Header\HeaderInterface;
+
+use Laminas\Http\Header\MultipleHeaderInterface;
+use Laminas\Http\Response as HttpResponse;
 
 /**
  * HTTP Response for current PHP environment

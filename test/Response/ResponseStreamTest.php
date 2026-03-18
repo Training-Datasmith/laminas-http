@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http\Response;
 
-use Laminas\Http\Response\Stream;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
+use const DIRECTORY_SEPARATOR;
 
 use function fgets;
 use function file_exists;
+
 use function fopen;
 use function fread;
 use function fwrite;
+
+use Laminas\Http\Response\Stream;
+
 use function md5;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+
 use function rewind;
 use function sys_get_temp_dir;
 use function tempnam;
-use function unlink;
 
-use const DIRECTORY_SEPARATOR;
+use function unlink;
 
 #[CoversClass(Stream::class)]
 class ResponseStreamTest extends TestCase

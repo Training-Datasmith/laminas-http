@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Header;
+
+use function array_keys;
+
+use function explode;
+use function implode;
 
 use Laminas\Http\Request;
 
-use function array_keys;
-use function explode;
-use function implode;
 use function preg_match;
 use function sprintf;
 use function strtolower;

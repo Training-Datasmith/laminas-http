@@ -4,29 +4,35 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http;
 
+use function array_shift;
+use function count;
+
+use const DIRECTORY_SEPARATOR;
+
+use function file_get_contents;
+use function floor;
+
 use Laminas\Http\Exception\InvalidArgumentException;
 use Laminas\Http\Exception\RuntimeException;
 use Laminas\Http\Header\GenericHeader;
+
 use Laminas\Http\Headers;
 use Laminas\Http\Response;
+
+use function md5;
+use function microtime;
+use function min;
+
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-use function array_shift;
-use function count;
-use function file_get_contents;
-use function floor;
-use function md5;
-use function microtime;
-use function min;
 use function print_r;
 use function sprintf;
 use function str_repeat;
 use function str_replace;
-use function strtolower;
 
-use const DIRECTORY_SEPARATOR;
+use function strtolower;
 
 class ResponseTest extends TestCase
 {

@@ -1,6 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\PhpEnvironment;
+
+use function basename;
+use function dirname;
+use function file_get_contents;
+use function function_exists;
+use function is_array;
+use function is_string;
 
 use Laminas\Http\Header\Cookie;
 use Laminas\Http\Request as HttpRequest;
@@ -9,12 +18,8 @@ use Laminas\Stdlib\ParametersInterface;
 use Laminas\Uri\Http as HttpUri;
 use Laminas\Validator\Hostname as HostnameValidator;
 
-use function basename;
-use function dirname;
-use function file_get_contents;
-use function function_exists;
-use function is_array;
-use function is_string;
+use const PHP_SAPI;
+
 use function preg_match;
 use function preg_replace;
 use function rtrim;
@@ -27,9 +32,8 @@ use function strtr;
 use function substr;
 use function trim;
 use function ucfirst;
-use function ucwords;
 
-use const PHP_SAPI;
+use function ucwords;
 
 /**
  * HTTP Request for current PHP environment

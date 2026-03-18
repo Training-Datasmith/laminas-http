@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http\Header;
 
+use function addslashes;
+use function array_shift;
+
 use Laminas\Http\Header\Accept;
 use Laminas\Http\Header\Accept\FieldValuePart\AbstractFieldValuePart;
 use Laminas\Http\Header\Accept\FieldValuePart\AcceptFieldValuePart;
 use Laminas\Http\Header\Exception\InvalidArgumentException;
 use Laminas\Http\Header\HeaderInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-
-use function addslashes;
-use function array_shift;
 
 class AcceptTest extends TestCase
 {

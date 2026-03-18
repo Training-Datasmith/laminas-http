@@ -6,6 +6,9 @@ namespace LaminasTest\Http;
 
 use ArrayIterator;
 use Countable;
+
+use function implode;
+
 use Iterator;
 use Laminas\Http\Exception\InvalidArgumentException;
 use Laminas\Http\Exception\RuntimeException;
@@ -16,9 +19,9 @@ use Laminas\Http\Header\HeaderInterface;
 use Laminas\Http\HeaderLoader;
 use Laminas\Http\Headers;
 use PHPUnit\Framework\Attributes\Group;
+
 use PHPUnit\Framework\TestCase;
 
-use function implode;
 use function sprintf;
 
 class HeadersTest extends TestCase

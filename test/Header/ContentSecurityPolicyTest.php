@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http\Header;
 
+use function implode;
+
 use Laminas\Http\Exception\RuntimeException;
 use Laminas\Http\Header\ContentSecurityPolicy;
 use Laminas\Http\Header\Exception\InvalidArgumentException;
@@ -13,9 +15,8 @@ use Laminas\Http\Header\MultipleHeaderInterface;
 use Laminas\Http\Headers;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 
-use function implode;
+use PHPUnit\Framework\TestCase;
 
 class ContentSecurityPolicyTest extends TestCase
 {

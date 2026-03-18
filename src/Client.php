@@ -1,28 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http;
 
-use ArrayIterator;
-use Laminas\Http\Client\Adapter\Curl;
-use Laminas\Http\Client\Adapter\Socket;
-use Laminas\Http\Client\Exception\RuntimeException;
-use Laminas\Http\Header\SetCookie;
-use Laminas\Stdlib\ArrayUtils;
-use Laminas\Stdlib\DispatchableInterface;
-use Laminas\Stdlib\ErrorHandler;
-use Laminas\Stdlib\RequestInterface;
-use Laminas\Stdlib\ResponseInterface;
-use Laminas\Uri\Http;
-use Traversable;
-
 use function array_merge;
+
+use ArrayIterator;
+
 use function base64_encode;
 use function basename;
 use function class_exists;
+
+use const CURLAUTH_DIGEST;
+use const CURLOPT_HTTPAUTH;
+use const CURLOPT_USERPWD;
+
 use function defined;
 use function explode;
 use function fclose;
 use function file_get_contents;
+
+use const FILEINFO_MIME;
+
 use function finfo_file;
 use function finfo_open;
 use function fopen;
@@ -37,6 +37,18 @@ use function is_array;
 use function is_int;
 use function is_resource;
 use function is_string;
+
+use Laminas\Http\Client\Adapter\Curl;
+use Laminas\Http\Client\Adapter\Socket;
+use Laminas\Http\Client\Exception\RuntimeException;
+use Laminas\Http\Header\SetCookie;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Stdlib\DispatchableInterface;
+use Laminas\Stdlib\ErrorHandler;
+use Laminas\Stdlib\RequestInterface;
+use Laminas\Stdlib\ResponseInterface;
+use Laminas\Uri\Http;
+
 use function md5;
 use function microtime;
 use function mime_content_type;
@@ -49,19 +61,17 @@ use function str_replace;
 use function stream_get_meta_data;
 use function stripos;
 use function strlen;
-use function strpos;
 use function strrpos;
 use function strtolower;
 use function strtoupper;
 use function substr;
+
 use function sys_get_temp_dir;
 use function tempnam;
-use function trim;
 
-use const CURLAUTH_DIGEST;
-use const CURLOPT_HTTPAUTH;
-use const CURLOPT_USERPWD;
-use const FILEINFO_MIME;
+use Traversable;
+
+use function trim;
 
 /**
  * Http client
@@ -1491,7 +1501,7 @@ class Client implements DispatchableInterface
 
                 return 'Basic ' . base64_encode($user . ':' . $password);
 
-            //case self::AUTH_DIGEST:
+                //case self::AUTH_DIGEST:
                 /**
                  * @todo Implement digest authentication
                  */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\PhpEnvironment;
 
 use function array_diff;
@@ -8,7 +10,6 @@ use function array_pop;
 use function explode;
 use function in_array;
 use function str_replace;
-use function strpos;
 use function strtoupper;
 
 /**

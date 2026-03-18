@@ -5,20 +5,24 @@ declare(strict_types=1);
 namespace LaminasTest\Http\Client;
 
 use ArrayObject;
+
+use function fopen;
+use function get_resource_type;
+
 use Laminas\Http\Client\Adapter;
 use Laminas\Http\Client\Adapter\Exception\InvalidArgumentException;
 use Laminas\Http\Client\Adapter\Exception\RuntimeException;
 use Laminas\Http\Client\Adapter\Socket;
 use Laminas\Uri\Uri;
+
+use function md5;
+use function microtime;
+
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use stdClass;
 
-use function fopen;
-use function get_resource_type;
-use function md5;
-use function microtime;
 use function stream_context_create;
 use function stream_context_get_options;
 

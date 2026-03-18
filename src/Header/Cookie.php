@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Header;
+
+use function array_key_exists;
+
+use function array_merge;
 
 use ArrayObject;
 
-use function array_key_exists;
-use function array_merge;
 use function count;
 use function explode;
 use function implode;

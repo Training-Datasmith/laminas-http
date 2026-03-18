@@ -1,52 +1,67 @@
-<?php // phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+<?php
+
+declare(strict_types=1);
+// phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
 
 namespace LaminasTest\Http\Client;
-
-use Exception;
-use Laminas\Http\Client as HTTPClient;
-use Laminas\Http\Client\Adapter;
-use Laminas\Http\Client\Adapter\AdapterInterface;
-use Laminas\Http\Client\Adapter\Exception as AdapterException;
-use Laminas\Http\Client\Adapter\Socket;
-use Laminas\Http\Request;
-use Laminas\Http\Response\Stream;
-use Laminas\Stdlib\Parameters;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
-use stdClass;
 
 use function array_merge;
 use function basename;
 use function ceil;
 use function dirname;
+
+use Exception;
+
 use function file_get_contents;
+
+use const FILEINFO_MIME;
+
 use function filesize;
+
+use const FILTER_VALIDATE_URL;
+
 use function filter_var;
 use function finfo_open;
 use function fopen;
 use function function_exists;
+
 use function getenv;
 use function implode;
 use function ini_get;
 use function is_array;
 use function is_string;
+
+use Laminas\Http\Client\Adapter;
+use Laminas\Http\Client\Adapter\AdapterInterface;
+use Laminas\Http\Client\Adapter\Exception as AdapterException;
+use Laminas\Http\Client\Adapter\Socket;
+use Laminas\Http\Client as HTTPClient;
+use Laminas\Http\Request;
+use Laminas\Http\Response\Stream;
+use Laminas\Stdlib\Parameters;
+
 use function microtime;
 use function mime_content_type;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+
 use function rtrim;
 use function serialize;
 use function sprintf;
+
+use stdClass;
+
 use function str_replace;
 use function stream_get_contents;
 use function strlen;
 use function strpos;
 use function strtolower;
 use function substr;
+
 use function sys_get_temp_dir;
 use function tempnam;
-
-use const FILEINFO_MIME;
-use const FILTER_VALIDATE_URL;
 
 /**
  * This Testsuite includes all Laminas_Http_Client that require a working web

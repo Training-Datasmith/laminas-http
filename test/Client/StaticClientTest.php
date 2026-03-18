@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http\Client;
 
+use const FILTER_VALIDATE_BOOLEAN;
+
+use function filter_var;
+use function getenv;
+
 use Laminas\Http\Client;
 use Laminas\Http\ClientStatic as HTTPClient;
+
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-use function filter_var;
-use function getenv;
 use function sprintf;
-use function substr;
 
-use const FILTER_VALIDATE_BOOLEAN;
+use function substr;
 
 /**
  * This are the test for the prototype of Laminas\Http\Client

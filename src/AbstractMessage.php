@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http;
 
-use Laminas\Stdlib\Message;
-
 use function in_array;
+
 use function is_string;
+
+use Laminas\Stdlib\Message;
 
 /**
  * HTTP standard message (Request/Response)

@@ -1,36 +1,42 @@
 <?php
 
-namespace Laminas\Http\Header;
+declare(strict_types=1);
 
-use DateTime;
-use Laminas\Uri\Uri;
-use Laminas\Uri\UriFactory;
+namespace Laminas\Http\Header;
 
 use function array_key_exists;
 use function array_pop;
 use function count;
+
+use DateTime;
+
 use function gettype;
 use function gmdate;
 use function is_int;
 use function is_numeric;
 use function is_scalar;
 use function is_string;
+
+use Laminas\Uri\Uri;
+use Laminas\Uri\UriFactory;
+
 use function max;
+
+use const PHP_INT_MAX;
+use const PHP_INT_SIZE;
+
 use function preg_match;
 use function preg_quote;
 use function preg_split;
 use function sprintf;
 use function str_replace;
-use function strpos;
 use function strrpos;
 use function strtolower;
 use function strtotime;
 use function time;
+
 use function urldecode;
 use function urlencode;
-
-use const PHP_INT_MAX;
-use const PHP_INT_SIZE;
 
 /**
  * @see http://www.ietf.org/rfc/rfc2109.txt

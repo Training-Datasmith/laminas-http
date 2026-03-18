@@ -1,15 +1,8 @@
 <?php
 
-namespace Laminas\Http\Client\Adapter;
+declare(strict_types=1);
 
-use Laminas\Http\Client\Adapter\AdapterInterface as HttpAdapter;
-use Laminas\Http\Client\Adapter\Exception as AdapterException;
-use Laminas\Http\Request;
-use Laminas\Http\Response;
-use Laminas\Stdlib\ArrayUtils;
-use Laminas\Stdlib\ErrorHandler;
-use Laminas\Uri\Uri;
-use Traversable;
+namespace Laminas\Http\Client\Adapter;
 
 use function count;
 use function ctype_xdigit;
@@ -19,6 +12,7 @@ use function feof;
 use function fgets;
 use function fread;
 use function ftell;
+
 use function fwrite;
 use function get_resource_type;
 use function gettype;
@@ -29,27 +23,30 @@ use function is_file;
 use function is_numeric;
 use function is_resource;
 use function is_string;
+
+use Laminas\Http\Client\Adapter\AdapterInterface as HttpAdapter;
+use Laminas\Http\Client\Adapter\Exception as AdapterException;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Stdlib\ErrorHandler;
+use Laminas\Uri\Uri;
+
 use function openssl_error_string;
+
+use const PHP_VERSION;
+
 use function rtrim;
 use function sprintf;
 use function str_ireplace;
+
+use const STREAM_CLIENT_CONNECT;
+use const STREAM_CLIENT_PERSISTENT;
+
 use function stream_context_create;
 use function stream_context_set_option;
 use function stream_copy_to_stream;
-use function stream_get_meta_data;
-use function stream_set_timeout;
-use function stream_socket_client;
-use function stream_socket_enable_crypto;
-use function strlen;
-use function strpos;
-use function strtolower;
-use function substr;
-use function trim;
-use function version_compare;
 
-use const PHP_VERSION;
-use const STREAM_CLIENT_CONNECT;
-use const STREAM_CLIENT_PERSISTENT;
 use const STREAM_CRYPTO_METHOD_SSLv23_CLIENT;
 use const STREAM_CRYPTO_METHOD_SSLv2_CLIENT;
 use const STREAM_CRYPTO_METHOD_SSLv3_CLIENT;
@@ -57,6 +54,21 @@ use const STREAM_CRYPTO_METHOD_TLS_CLIENT;
 use const STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT;
 use const STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT;
 use const STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
+
+use function stream_get_meta_data;
+
+use function stream_set_timeout;
+use function stream_socket_client;
+use function stream_socket_enable_crypto;
+use function strlen;
+use function strpos;
+use function strtolower;
+use function substr;
+
+use Traversable;
+
+use function trim;
+use function version_compare;
 
 /**
  * A sockets based (stream\socket\client) adapter class for Laminas\Http\Client. Can be used
@@ -614,7 +626,7 @@ class Socket implements HttpAdapter, StreamInterface
             if ($this->outStream) {
                 $response = str_ireplace("Transfer-Encoding: chunked\r\n", '', $response);
             }
-        // Else, if we got the content-length header, read this number of bytes
+            // Else, if we got the content-length header, read this number of bytes
         } elseif ($contentLength !== false) {
             // If we got more than one Content-Length header (see Laminas-9404) use
             // the last value sent
@@ -627,8 +639,8 @@ class Socket implements HttpAdapter, StreamInterface
 
             for (
                 $readTo = $currentPos + $contentLength;
-                 $readTo > $currentPos;
-                 $currentPos = ftell($this->socket)
+                $readTo > $currentPos;
+                $currentPos = ftell($this->socket)
             ) {
                 if ($this->outStream) {
                     if (stream_copy_to_stream($this->socket, $this->outStream, $readTo - $currentPos) === 0) {
@@ -651,7 +663,7 @@ class Socket implements HttpAdapter, StreamInterface
                 }
             }
 
-        // Fallback: just read the response until EOF
+            // Fallback: just read the response until EOF
         } else {
             do {
                 if ($this->outStream) {

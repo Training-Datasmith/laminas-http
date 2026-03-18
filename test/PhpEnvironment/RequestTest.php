@@ -9,12 +9,14 @@ use Laminas\Http\Header\GenericHeader;
 use Laminas\Http\Headers;
 use Laminas\Http\PhpEnvironment\Request;
 use Laminas\Stdlib\Parameters;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 
 use function md5;
 use function parse_url;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
 {

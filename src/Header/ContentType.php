@@ -1,22 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Header;
 
-use stdClass;
-
 use function array_merge;
+
 use function array_shift;
 use function array_walk;
 use function count;
 use function explode;
-use function gettype;
 use function implode;
-use function is_object;
 use function is_string;
 use function preg_match;
 use function sprintf;
+
+use stdClass;
+
 use function strlen;
-use function strpos;
 use function strtolower;
 use function substr;
 use function trim;

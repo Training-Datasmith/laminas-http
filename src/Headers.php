@@ -1,39 +1,51 @@
 <?php
 
-namespace Laminas\Http;
+declare(strict_types=1);
 
-use ArrayIterator;
-use Countable;
-use Iterator;
-use Laminas\Http\Header\Exception;
-use Laminas\Http\Header\GenericHeader;
-use Laminas\Http\Header\MultipleHeaderInterface;
-use Laminas\Loader\PluginClassLocator;
-// phpcs:ignore SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
-use ReturnTypeWillChange;
-use Traversable;
+namespace Laminas\Http;
 
 use function array_keys;
 use function array_search;
 use function array_shift;
+
+use ArrayIterator;
+
 use function class_implements;
 use function count;
+
+use Countable;
+
+// phpcs:ignore SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use function current;
 use function explode;
-use function gettype;
+
 use function implode;
 use function in_array;
 use function is_array;
 use function is_int;
-use function is_object;
 use function is_string;
+
+use Iterator;
+
 use function key;
+
+use Laminas\Http\Header\Exception;
+use Laminas\Http\Header\GenericHeader;
+use Laminas\Http\Header\MultipleHeaderInterface;
+use Laminas\Loader\PluginClassLocator;
+
 use function next;
 use function preg_match;
 use function reset;
+
+use ReturnTypeWillChange;
+
 use function sprintf;
 use function str_replace;
 use function strtolower;
+
+use Traversable;
+
 use function trim;
 
 /**

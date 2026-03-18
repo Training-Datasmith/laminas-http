@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Header;
+
+use function is_string;
 
 use Laminas\Uri\Exception as UriException;
 use Laminas\Uri\UriFactory;
+
 use Laminas\Uri\UriInterface;
 
-use function is_string;
 use function sprintf;
 use function strtolower;
 use function trim;

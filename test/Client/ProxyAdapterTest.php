@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace LaminasTest\Http\Client;
 
+use function array_keys;
+use function explode;
+
+use const FILTER_VALIDATE_BOOLEAN;
+
+use function filter_var;
+use function getenv;
+
 use Laminas\Http\Client;
 use Laminas\Http\Client\Adapter\Proxy;
 use Laminas\Http\Client\Adapter\Socket;
 use Laminas\Http\Request;
 use PHPUnit\Framework\Attributes\Group;
 
-use function array_keys;
-use function explode;
-use function filter_var;
-use function getenv;
 use function sprintf;
-use function trim;
 
-use const FILTER_VALIDATE_BOOLEAN;
+use function trim;
 
 /**
  * Laminas_Http_Client_Adapter_Proxy test suite.

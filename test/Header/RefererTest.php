@@ -81,7 +81,7 @@ class RefererTest extends TestCase
 
     public function testInvalidUriShouldWrapException(): void
     {
-        $headerString = "Referer: unknown-scheme://test";
+        $headerString = 'Referer: unknown-scheme://test';
 
         $headers = Headers::fromString($headerString);
 

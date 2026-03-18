@@ -6,11 +6,13 @@ namespace LaminasTest\Http\Header;
 
 use Laminas\Http\Header\Exception\InvalidArgumentException;
 use Laminas\Http\Header\GenericHeader;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 
 use function ord;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+
+use PHPUnit\Framework\TestCase;
 
 class GenericHeaderTest extends TestCase
 {

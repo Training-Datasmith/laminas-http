@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Header;
 
 use function is_int;
 use function is_numeric;
-use function strtolower;
 
 use const PHP_INT_MAX;
+
+use function strtolower;
 
 /**
  * Age HTTP Header

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Http\Header\Accept\FieldValuePart;
 
 use stdClass;
@@ -26,8 +28,7 @@ abstract class AbstractFieldValuePart
          * Internal object used for value retrieval
          */
         private $internalValues
-    )
-    {
+    ) {
     }
 
     /**
