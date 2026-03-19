@@ -872,7 +872,7 @@ class Client implements DispatchableInterface
                     $response = md5($ha1 . ':' . $digest['nonce'] . ':' . $ha2);
                 } else {
                     $response = md5($ha1 . ':' . $digest['nonce'] . ':' . $digest['nc']
-                                    . ':' . $digest['cnonce'] . ':' . $digest['qoc'] . ':' . $ha2);
+                                    . ':' . $digest['cnonce'] . ':' . $digest['qop'] . ':' . $ha2);
                 }
                 break;
         }
@@ -1384,10 +1384,14 @@ class Client implements DispatchableInterface
      */
     public function encodeFormData(string $boundary, string $name, string $value, $filename = null, $headers = []): string
     {
+        // Sanitize $name and $filename: strip double-quotes and CRLF to prevent header injection
+        $name = str_replace(['"', "\r", "\n"], '', $name);
+
         $ret = '--' . $boundary . "\r\n"
             . 'Content-Disposition: form-data; name="' . $name . '"';
 
         if ($filename) {
+            $filename = str_replace(['"', "\r", "\n"], '', $filename);
             $ret .= '; filename="' . $filename . '"';
         }
         $ret .= "\r\n";
