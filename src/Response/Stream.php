@@ -1,34 +1,26 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Response;
 
 use function array_shift;
-
 use const E_WARNING;
-
 use function explode;
 use function fgets;
-
 use function file_exists;
 use function get_resource_type;
 use function implode;
 use function is_resource;
 use function is_string;
-
 use Laminas\Http\Exception;
-use Laminas\Http\Header\ContentLength;
+use Laminas\Http\Header\Content_Length;
 use Laminas\Http\Response;
-use Laminas\Stdlib\ErrorHandler;
-
+use Laminas\Stdlib\Error_Handler;
 use function sprintf;
 use function stream_get_contents;
 use function strlen;
 use function trim;
-
 use function unlink;
-
 /**
  * Represents an HTTP response message as PHP stream resource
  */
@@ -39,22 +31,19 @@ class Stream extends Response
      *
      * @var int
      */
-    protected $contentLength;
-
+    protected $content_length;
     /**
      * The portion of the body that has already been streamed
      *
      * @var int
      */
-    protected $contentStreamed = 0;
-
+    protected $content_streamed = 0;
     /**
      * Response as stream
      *
      * @var resource
      */
     protected $stream;
-
     /**
      * The name of the file containing the stream
      *
@@ -62,99 +51,89 @@ class Stream extends Response
      *
      * @var string
      */
-    protected $streamName;
-
+    protected $stream_name;
     /**
      * Should we clean up the stream file when this response is closed?
      *
      * @var bool
      */
     protected $cleanup;
-
     /**
      * Set content length
      *
      * @param int $contentLength
      */
-    public function setContentLength($contentLength = null): void
+    public function set_content_length($content_length = null): void
     {
-        $this->contentLength = $contentLength;
+        $this->content_length = $content_length;
     }
-
     /**
      * Get content length
      *
      * @return int|null
      */
-    public function getContentLength()
+    public function get_content_length()
     {
-        return $this->contentLength;
+        return $this->content_length;
     }
-
     /**
      * Get the response as stream
      *
      * @return resource
      */
-    public function getStream()
+    public function get_stream()
     {
         return $this->stream;
     }
-
     /**
      * Set the response stream
      *
      * @param resource $stream
      * @return $this
      */
-    public function setStream($stream)
+    public function set_stream($stream)
     {
         $this->stream = $stream;
         return $this;
     }
-
     /**
      * Get the cleanup trigger
      *
      * @return bool
      */
-    public function getCleanup()
+    public function get_cleanup()
     {
         return $this->cleanup;
     }
-
     /**
      * Set the cleanup trigger
      *
      * @param bool $cleanup
      */
-    public function setCleanup($cleanup = true): void
+    public function set_cleanup($cleanup = true): void
     {
         $this->cleanup = $cleanup;
     }
-
     /**
      * Get file name associated with the stream
      *
      * @return string
      */
-    public function getStreamName()
+    public function get_stream_name()
     {
-        return $this->streamName;
+        return $this->stream_name;
     }
-
     /**
      * Set file name associated with the stream
      *
      * @param string $streamName Name to set
      * @return $this
      */
-    public function setStreamName($streamName)
+    public function set_stream_name($stream_name)
     {
-        $this->streamName = $streamName;
+        $this->stream_name = $stream_name;
         return $this;
     }
-
     /**
      * Create a new Laminas\Http\Response\Stream object from a stream
      *
@@ -164,74 +143,59 @@ class Stream extends Response
      * @throws Exception\InvalidArgumentException
      * @throws Exception\OutOfRangeException
      */
-    public static function fromStream($responseString, $stream)
+    public static function from_stream($response_string, $stream)
     {
-        if (! is_resource($stream) || get_resource_type($stream) !== 'stream') {
+        if (!is_resource($stream) || get_resource_type($stream) !== 'stream') {
             throw new Exception\InvalidArgumentException('A valid stream is required');
         }
-
-        $headerComplete = false;
-        $headersString  = '';
-        $responseArray  = [];
-
-        if ($responseString) {
-            $responseArray = explode("\n", $responseString);
+        $header_complete = false;
+        $headers_string = '';
+        $response_array = [];
+        if ($response_string) {
+            $response_array = explode("\n", $response_string);
         }
-
-        while (! empty($responseArray)) {
-            $nextLine        = array_shift($responseArray);
-            $headersString  .= $nextLine . "\n";
-            $nextLineTrimmed = trim($nextLine);
-            if ($nextLineTrimmed === '') {
-                $headerComplete = true;
+        while (!empty($response_array)) {
+            $next_line = array_shift($response_array);
+            $headers_string .= $next_line . "\n";
+            $next_line_trimmed = trim($next_line);
+            if ($next_line_trimmed === '') {
+                $header_complete = true;
                 break;
             }
         }
-
-        if (! $headerComplete) {
-            while (false !== ($nextLine = fgets($stream))) {
-                $headersString .= trim($nextLine) . "\r\n";
-                if ($nextLine === "\r\n" || $nextLine === "\n") {
-                    $headerComplete = true;
+        if (!$header_complete) {
+            while (false !== $next_line = fgets($stream)) {
+                $headers_string .= trim($next_line) . "\r\n";
+                if ($next_line === "\r\n" || $next_line === "\n") {
+                    $header_complete = true;
                     break;
                 }
             }
         }
-
-        if (! $headerComplete) {
+        if (!$header_complete) {
             throw new Exception\OutOfRangeException('End of header not found');
         }
-
         /** @var Stream $response */
-        $response = static::fromString($headersString);
-
+        $response = static::from_string($headers_string);
         if (is_resource($stream)) {
-            $response->setStream($stream);
+            $response->set_stream($stream);
         }
-
-        if (! empty($responseArray)) {
-            $response->content = implode("\n", $responseArray);
+        if (!empty($response_array)) {
+            $response->content = implode("\n", $response_array);
         }
-
-        $headers = $response->getHeaders();
+        $headers = $response->get_headers();
         foreach ($headers as $header) {
-            if ($header instanceof ContentLength) {
-                $response->setContentLength((int) $header->getFieldValue());
-                $contentLength = $response->getContentLength();
-                if (strlen((string) $response->content) > $contentLength) {
-                    throw new Exception\OutOfRangeException(sprintf(
-                        'Too much content was extracted from the stream (%d instead of %d bytes)',
-                        strlen((string) $response->content),
-                        $contentLength
-                    ));
+            if ($header instanceof Content_Length) {
+                $response->set_content_length((int) $header->get_field_value());
+                $content_length = $response->get_content_length();
+                if (strlen((string) $response->content) > $content_length) {
+                    throw new Exception\OutOfRangeException(sprintf('Too much content was extracted from the stream (%d instead of %d bytes)', strlen((string) $response->content), $content_length));
                 }
                 break;
             }
         }
-
         return $response;
     }
-
     /**
      * Get the response body as string
      *
@@ -244,14 +208,13 @@ class Stream extends Response
      *
      * @return string
      */
-    public function getBody()
+    public function get_body()
     {
         if ($this->stream !== null) {
-            $this->readStream();
+            $this->read_stream();
         }
-        return parent::getBody();
+        return parent::get_body();
     }
-
     /**
      * Get the raw response body (as transferred "on wire") as string
      *
@@ -260,14 +223,13 @@ class Stream extends Response
      *
      * @return string
      */
-    public function getRawBody()
+    public function get_raw_body()
     {
         if ($this->stream) {
-            $this->readStream();
+            $this->read_stream();
         }
         return $this->content;
     }
-
     /**
      * Read stream content and return it as string
      *
@@ -275,39 +237,37 @@ class Stream extends Response
      *
      * @return string
      */
-    protected function readStream()
+    protected function read_stream()
     {
-        $contentLength = $this->getContentLength();
-        if (null !== $contentLength) {
-            $bytes = $contentLength - $this->contentStreamed;
+        $content_length = $this->get_content_length();
+        if (null !== $content_length) {
+            $bytes = $content_length - $this->content_streamed;
         } else {
-            $bytes = -1; // Read the whole buffer
+            $bytes = -1;
+            // Read the whole buffer
         }
-
-        if (! is_resource($this->stream) || $bytes === 0) {
+        if (!is_resource($this->stream) || $bytes === 0) {
             return '';
         }
-
-        $this->content         .= stream_get_contents($this->stream, $bytes);
-        $this->contentStreamed += strlen($this->content);
-
-        if ($this->getContentLength() === $this->contentStreamed) {
+        $this->content .= stream_get_contents($this->stream, $bytes);
+        $this->content_streamed += strlen($this->content);
+        if ($this->get_content_length() === $this->content_streamed) {
             $this->stream = null;
         }
     }
-
     /**
      * Destructor
      */
     public function __destruct()
     {
         if (is_resource($this->stream)) {
-            $this->stream = null; //Could be listened by others
+            $this->stream = null;
+            //Could be listened by others
         }
-        if ($this->cleanup && is_string($this->streamName) && file_exists($this->streamName)) {
-            ErrorHandler::start(E_WARNING);
-            unlink($this->streamName);
-            ErrorHandler::stop();
+        if ($this->cleanup && is_string($this->stream_name) && file_exists($this->stream_name)) {
+            Error_Handler::start(E_WARNING);
+            unlink($this->stream_name);
+            Error_Handler::stop();
         }
     }
 }

@@ -1,74 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http;
 
-use Laminas\Loader\PluginClassLoader;
-
+use Laminas\Loader\Plugin_Class_Loader;
 /**
  * Plugin Class Loader implementation for HTTP headers
  */
-class HeaderLoader extends PluginClassLoader
+class Header_Loader extends Plugin_Class_Loader
 {
     /** @var array Pre-aliased Header plugins */
-    protected $plugins = [
-        'accept'                  => Header\Accept::class,
-        'acceptcharset'           => Header\AcceptCharset::class,
-        'acceptencoding'          => Header\AcceptEncoding::class,
-        'acceptlanguage'          => Header\AcceptLanguage::class,
-        'acceptranges'            => Header\AcceptRanges::class,
-        'age'                     => Header\Age::class,
-        'allow'                   => Header\Allow::class,
-        'authenticationinfo'      => Header\AuthenticationInfo::class,
-        'authorization'           => Header\Authorization::class,
-        'cachecontrol'            => Header\CacheControl::class,
-        'connection'              => Header\Connection::class,
-        'contentdisposition'      => Header\ContentDisposition::class,
-        'contentencoding'         => Header\ContentEncoding::class,
-        'contentlanguage'         => Header\ContentLanguage::class,
-        'contentlength'           => Header\ContentLength::class,
-        'contentlocation'         => Header\ContentLocation::class,
-        'contentmd5'              => Header\ContentMD5::class,
-        'contentrange'            => Header\ContentRange::class,
-        'contentsecuritypolicy'   => Header\ContentSecurityPolicy::class,
-        'contenttransferencoding' => Header\ContentTransferEncoding::class,
-        'contenttype'             => Header\ContentType::class,
-        'cookie'                  => Header\Cookie::class,
-        'date'                    => Header\Date::class,
-        'etag'                    => Header\Etag::class,
-        'expect'                  => Header\Expect::class,
-        'expires'                 => Header\Expires::class,
-        'featurepolicy'           => Header\FeaturePolicy::class,
-        'from'                    => Header\From::class,
-        'host'                    => Header\Host::class,
-        'ifmatch'                 => Header\IfMatch::class,
-        'ifmodifiedsince'         => Header\IfModifiedSince::class,
-        'ifnonematch'             => Header\IfNoneMatch::class,
-        'ifrange'                 => Header\IfRange::class,
-        'ifunmodifiedsince'       => Header\IfUnmodifiedSince::class,
-        'keepalive'               => Header\KeepAlive::class,
-        'lastmodified'            => Header\LastModified::class,
-        'location'                => Header\Location::class,
-        'maxforwards'             => Header\MaxForwards::class,
-        'origin'                  => Header\Origin::class,
-        'pragma'                  => Header\Pragma::class,
-        'proxyauthenticate'       => Header\ProxyAuthenticate::class,
-        'proxyauthorization'      => Header\ProxyAuthorization::class,
-        'range'                   => Header\Range::class,
-        'referer'                 => Header\Referer::class,
-        'refresh'                 => Header\Refresh::class,
-        'retryafter'              => Header\RetryAfter::class,
-        'server'                  => Header\Server::class,
-        'setcookie'               => Header\SetCookie::class,
-        'te'                      => Header\TE::class,
-        'trailer'                 => Header\Trailer::class,
-        'transferencoding'        => Header\TransferEncoding::class,
-        'upgrade'                 => Header\Upgrade::class,
-        'useragent'               => Header\UserAgent::class,
-        'vary'                    => Header\Vary::class,
-        'via'                     => Header\Via::class,
-        'warning'                 => Header\Warning::class,
-        'wwwauthenticate'         => Header\WWWAuthenticate::class,
-    ];
+    protected $plugins = ['accept' => Header\Accept::class, 'acceptcharset' => Header\Accept_Charset::class, 'acceptencoding' => Header\Accept_Encoding::class, 'acceptlanguage' => Header\Accept_Language::class, 'acceptranges' => Header\Accept_Ranges::class, 'age' => Header\Age::class, 'allow' => Header\Allow::class, 'authenticationinfo' => Header\Authentication_Info::class, 'authorization' => Header\Authorization::class, 'cachecontrol' => Header\Cache_Control::class, 'connection' => Header\Connection::class, 'contentdisposition' => Header\Content_Disposition::class, 'contentencoding' => Header\Content_Encoding::class, 'contentlanguage' => Header\Content_Language::class, 'contentlength' => Header\Content_Length::class, 'contentlocation' => Header\Content_Location::class, 'contentmd5' => Header\Content_Md5::class, 'contentrange' => Header\Content_Range::class, 'contentsecuritypolicy' => Header\Content_Security_Policy::class, 'contenttransferencoding' => Header\Content_Transfer_Encoding::class, 'contenttype' => Header\Content_Type::class, 'cookie' => Header\Cookie::class, 'date' => Header\Date::class, 'etag' => Header\Etag::class, 'expect' => Header\Expect::class, 'expires' => Header\Expires::class, 'featurepolicy' => Header\Feature_Policy::class, 'from' => Header\From::class, 'host' => Header\Host::class, 'ifmatch' => Header\If_Match::class, 'ifmodifiedsince' => Header\If_Modified_Since::class, 'ifnonematch' => Header\If_None_Match::class, 'ifrange' => Header\If_Range::class, 'ifunmodifiedsince' => Header\If_Unmodified_Since::class, 'keepalive' => Header\Keep_Alive::class, 'lastmodified' => Header\Last_Modified::class, 'location' => Header\Location::class, 'maxforwards' => Header\Max_Forwards::class, 'origin' => Header\Origin::class, 'pragma' => Header\Pragma::class, 'proxyauthenticate' => Header\Proxy_Authenticate::class, 'proxyauthorization' => Header\Proxy_Authorization::class, 'range' => Header\Range::class, 'referer' => Header\Referer::class, 'refresh' => Header\Refresh::class, 'retryafter' => Header\Retry_After::class, 'server' => Header\Server::class, 'setcookie' => Header\Set_Cookie::class, 'te' => Header\TE::class, 'trailer' => Header\Trailer::class, 'transferencoding' => Header\Transfer_Encoding::class, 'upgrade' => Header\Upgrade::class, 'useragent' => Header\User_Agent::class, 'vary' => Header\Vary::class, 'via' => Header\Via::class, 'warning' => Header\Warning::class, 'wwwauthenticate' => Header\Www_Authenticate::class];
 }

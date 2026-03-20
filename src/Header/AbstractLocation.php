@@ -1,20 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Header;
 
 use function is_string;
-
 use Laminas\Uri\Exception as UriException;
-use Laminas\Uri\UriFactory;
-
-use Laminas\Uri\UriInterface;
-
+use Laminas\Uri\Uri_Factory;
+use Laminas\Uri\Uri_Interface;
 use function sprintf;
 use function strtolower;
 use function trim;
-
 /**
  * Abstract Location Header
  * Supports headers that have URI as value
@@ -27,7 +22,7 @@ use function trim;
  * While RFC 1945 requires an absolute URI, most of the browsers also support relative URI
  * This class allows relative URIs, and let user retrieve URI instance if strict validation needed
  */
-abstract class AbstractLocation implements HeaderInterface, \Stringable
+abstract class Abstract_Location implements Header_Interface, \Stringable
 {
     /**
      * URI for this header
@@ -35,7 +30,6 @@ abstract class AbstractLocation implements HeaderInterface, \Stringable
      * @var UriInterface
      */
     protected $uri;
-
     /**
      * Create location-based header from string
      *
@@ -43,26 +37,19 @@ abstract class AbstractLocation implements HeaderInterface, \Stringable
      * @return static
      * @throws Exception\InvalidArgumentException
      */
-    public static function fromString($headerLine)
+    public static function from_string($header_line)
     {
-        $locationHeader = new static();
-
+        $location_header = new static();
         // Laminas-5520 - IIS bug, no space after colon
-        [$name, $uri] = GenericHeader::splitHeaderLine($headerLine);
-
+        [$name, $uri] = Generic_Header::split_header_line($header_line);
         // check to ensure proper header type for this factory
-        if (strtolower($name) !== strtolower($locationHeader->getFieldName())) {
-            throw new Exception\InvalidArgumentException(
-                'Invalid header line for "' . $locationHeader->getFieldName() . '" header string'
-            );
+        if (strtolower($name) !== strtolower($location_header->get_field_name())) {
+            throw new Exception\InvalidArgumentException('Invalid header line for "' . $location_header->get_field_name() . '" header string');
         }
-
-        HeaderValue::assertValid($uri);
-        $locationHeader->setUri(trim($uri));
-
-        return $locationHeader;
+        Header_Value::assert_valid($uri);
+        $location_header->set_uri(trim($uri));
+        return $location_header;
     }
-
     /**
      * Set the URI/URL for this header, this can be a string or an instance of Laminas\Uri\Http
      *
@@ -70,39 +57,32 @@ abstract class AbstractLocation implements HeaderInterface, \Stringable
      * @return $this
      * @throws Exception\InvalidArgumentException
      */
-    public function setUri($uri)
+    public function set_uri($uri)
     {
         if (is_string($uri)) {
             try {
-                $uri = UriFactory::factory($uri);
-            } catch (UriException\InvalidUriPartException|UriException\InvalidArgumentException $e) {
-                throw new Exception\InvalidArgumentException(
-                    sprintf('Invalid URI passed as string (%s)', $uri),
-                    $e->getCode(),
-                    $e
-                );
+                $uri = Uri_Factory::factory($uri);
+            } catch (Uri_Exception\Invalid_Uri_Part_Exception|Uri_Exception\InvalidArgumentException $e) {
+                throw new Exception\InvalidArgumentException(sprintf('Invalid URI passed as string (%s)', $uri), $e->get_code(), $e);
             }
-        } elseif (! $uri instanceof UriInterface) {
+        } elseif (!$uri instanceof Uri_Interface) {
             throw new Exception\InvalidArgumentException('URI must be an instance of Laminas\Uri\Http or a string');
         }
         $this->uri = $uri;
-
         return $this;
     }
-
     /**
      * Return the URI for this header
      *
      * @return string
      */
-    public function getUri()
+    public function get_uri()
     {
-        if ($this->uri instanceof UriInterface) {
-            return $this->uri->toString();
+        if ($this->uri instanceof Uri_Interface) {
+            return $this->uri->to_string();
         }
         return $this->uri;
     }
-
     /**
      * Return the URI for this header as an instance of Laminas\Uri\Http
      *
@@ -111,36 +91,33 @@ abstract class AbstractLocation implements HeaderInterface, \Stringable
     public function uri()
     {
         if ($this->uri === null || is_string($this->uri)) {
-            $this->uri = UriFactory::factory($this->uri);
+            $this->uri = Uri_Factory::factory($this->uri);
         }
         return $this->uri;
     }
-
     /**
      * Get header value as URI string
      *
      * @return string
      */
-    public function getFieldValue()
+    public function get_field_value()
     {
-        return $this->getUri();
+        return $this->get_uri();
     }
-
     /**
      * Output header line
      *
      * @return string
      */
-    public function toString()
+    public function to_string()
     {
-        return $this->getFieldName() . ': ' . $this->getUri();
+        return $this->get_field_name() . ': ' . $this->get_uri();
     }
-
     /**
      * Allow casting to string
      */
     public function __toString(): string
     {
-        return $this->toString();
+        return $this->to_string();
     }
 }

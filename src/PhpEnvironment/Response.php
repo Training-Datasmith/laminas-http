@@ -1,29 +1,24 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Http\PhpEnvironment;
+declare (strict_types=1);
+namespace Laminas\Http\Php_Environment;
 
 use function call_user_func;
 use function header;
-
-use Laminas\Http\Header\HeaderInterface;
-
-use Laminas\Http\Header\MultipleHeaderInterface;
+use Laminas\Http\Header\Header_Interface;
+use Laminas\Http\Header\Multiple_Header_Interface;
 use Laminas\Http\Response as HttpResponse;
-
 /**
  * HTTP Response for current PHP environment
  */
-class Response extends HttpResponse
+class Response extends Http_Response
 {
     /**
      * @deprecated This property is deprecated, and will be removed
      *
      * @var bool
      */
-    public $headersSent;
-
+    public $headers_sent;
     /**
      * The current used version
      * (The value will be detected on getVersion)
@@ -31,13 +26,10 @@ class Response extends HttpResponse
      * @var null|string
      */
     protected $version;
-
     /** @var bool */
-    protected $contentSent = false;
-
+    protected $content_sent = false;
     /** @var null|callable */
-    private $headersSentHandler;
-
+    private $headers_sent_handler;
     /**
      * Return the HTTP version for this response
      *
@@ -45,97 +37,84 @@ class Response extends HttpResponse
      *
      * @return string
      */
-    public function getVersion()
+    public function get_version()
     {
-        if (! $this->version) {
-            $this->version = $this->detectVersion();
+        if (!$this->version) {
+            $this->version = $this->detect_version();
         }
         return $this->version;
     }
-
     /**
      * Detect the current used protocol version.
      * If detection failed it falls back to version 1.0.
      *
      * @return string
      */
-    protected function detectVersion()
+    protected function detect_version()
     {
         if (isset($_SERVER['SERVER_PROTOCOL']) && $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.1') {
             return self::VERSION_11;
         }
-
         return self::VERSION_10;
     }
-
     /**
      * @return bool
      */
-    public function headersSent()
+    public function headers_sent()
     {
         return headers_sent();
     }
-
     /**
      * @return bool
      */
-    public function contentSent()
+    public function content_sent()
     {
-        return $this->contentSent;
+        return $this->content_sent;
     }
-
-    public function setHeadersSentHandler(callable $handler): void
+    public function set_headers_sent_handler(callable $handler): void
     {
-        $this->headersSentHandler = $handler;
+        $this->headers_sent_handler = $handler;
     }
-
     /**
      * Send HTTP headers
      *
      * @return $this
      */
-    public function sendHeaders()
+    public function send_headers()
     {
-        if ($this->headersSent()) {
-            if ($this->headersSentHandler) {
-                call_user_func($this->headersSentHandler, $this);
+        if ($this->headers_sent()) {
+            if ($this->headers_sent_handler) {
+                call_user_func($this->headers_sent_handler, $this);
             }
-
             return $this;
         }
-
-        $status = $this->renderStatusLine();
+        $status = $this->render_status_line();
         header($status);
-
         /** @var HeaderInterface $header */
-        foreach ($this->getHeaders() as $header) {
-            if ($header instanceof MultipleHeaderInterface) {
-                header($header->toString(), false);
+        foreach ($this->get_headers() as $header) {
+            if ($header instanceof Multiple_Header_Interface) {
+                header($header->to_string(), false);
                 continue;
             }
-            header($header->toString());
+            header($header->to_string());
         }
-
-        $this->headersSent = true;
+        $this->headers_sent = true;
         return $this;
     }
-
     /**
      * Send content
      *
      * @return $this
      */
-    public function sendContent()
+    public function send_content()
     {
-        if ($this->contentSent()) {
+        if ($this->content_sent()) {
             return $this;
         }
-
-        echo $this->getContent();
-        $this->contentSent = true;
+        echo $this->get_content();
+        $this->content_sent = true;
         return $this;
     }
-
     /**
      * Send HTTP response
      *
@@ -143,8 +122,7 @@ class Response extends HttpResponse
      */
     public function send()
     {
-        $this->sendHeaders()
-             ->sendContent();
+        $this->send_headers()->send_content();
         return $this;
     }
 }

@@ -1,37 +1,32 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Header;
 
-use Laminas\Http\Header\Accept\FieldValuePart;
-
+use Laminas\Http\Header\Accept\Field_Value_Part;
 /**
  * Accept Charset Header
  *
  * @see        http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.2
  */
-class AcceptCharset extends AbstractAccept
+class Accept_Charset extends Abstract_Accept
 {
     /** @var string */
-    protected $regexAddType = '#^([a-zA-Z0-9+-]+|\*)$#';
-
+    protected $regex_add_type = '#^([a-zA-Z0-9+-]+|\*)$#';
     /**
      * Get field name
      */
-    public function getFieldName(): string
+    public function get_field_name(): string
     {
         return 'Accept-Charset';
     }
-
     /**
      * Cast to string
      */
-    public function toString(): string
+    public function to_string(): string
     {
-        return 'Accept-Charset: ' . $this->getFieldValue();
+        return 'Accept-Charset: ' . $this->get_field_value();
     }
-
     /**
      * Add a charset, with the given priority
      *
@@ -39,22 +34,20 @@ class AcceptCharset extends AbstractAccept
      * @param  int|float $priority
      * @return $this
      */
-    public function addCharset($type, $priority = 1)
+    public function add_charset($type, $priority = 1)
     {
-        return $this->addType($type, $priority);
+        return $this->add_type($type, $priority);
     }
-
     /**
      * Does the header have the requested charset?
      *
      * @param  string $type
      * @return bool
      */
-    public function hasCharset($type)
+    public function has_charset($type)
     {
-        return $this->hasType($type);
+        return $this->has_type($type);
     }
-
     /**
      * Parse the keys contained in the header line
      *
@@ -62,10 +55,9 @@ class AcceptCharset extends AbstractAccept
      *
      * @param string $fieldValuePart
      */
-    protected function parseFieldValuePart($fieldValuePart): \Laminas\Http\Header\Accept\FieldValuePart\CharsetFieldValuePart
+    protected function parse_field_value_part($field_value_part): \Laminas\Http\Header\Accept\Field_Value_Part\Charset_Field_Value_Part
     {
-        $internalValues = parent::parseFieldValuePart($fieldValuePart);
-
-        return new FieldValuePart\CharsetFieldValuePart($internalValues);
+        $internal_values = parent::parse_field_value_part($field_value_part);
+        return new Field_Value_Part\Charset_Field_Value_Part($internal_values);
     }
 }

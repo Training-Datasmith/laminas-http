@@ -1,37 +1,34 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Http\Header\Accept\FieldValuePart;
+declare (strict_types=1);
+namespace Laminas\Http\Header\Accept\Field_Value_Part;
 
 /**
  * Field Value Part
  *
  * @see        http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
  */
-class AcceptFieldValuePart extends AbstractFieldValuePart
+class Accept_Field_Value_Part extends Abstract_Field_Value_Part
 {
     /**
      * @return string
      */
-    public function getSubtype()
+    public function get_subtype()
     {
-        return $this->getInternalValues()->subtype;
+        return $this->get_internal_values()->subtype;
     }
-
     /**
      * @return string
      */
-    public function getSubtypeRaw()
+    public function get_subtype_raw()
     {
-        return $this->getInternalValues()->subtypeRaw;
+        return $this->get_internal_values()->subtype_raw;
     }
-
     /**
      * @return string
      */
-    public function getFormat()
+    public function get_format()
     {
-        return $this->getInternalValues()->format;
+        return $this->get_internal_values()->format;
     }
 }

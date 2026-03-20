@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Http\PhpEnvironment;
+declare (strict_types=1);
+namespace Laminas\Http\Php_Environment;
 
 use function array_diff;
 use function array_map;
@@ -11,11 +10,10 @@ use function explode;
 use function in_array;
 use function str_replace;
 use function strtoupper;
-
 /**
  * Functionality for determining client IP address.
  */
-class RemoteAddress
+class Remote_Address
 {
     /**
      * Whether to use proxy addresses or not.
@@ -27,22 +25,19 @@ class RemoteAddress
      *
      * @var bool
      */
-    protected $useProxy = false;
-
+    protected $use_proxy = false;
     /**
      * List of trusted proxy IP addresses
      *
      * @var array
      */
-    protected $trustedProxies = [];
-
+    protected $trusted_proxies = [];
     /**
      * HTTP header to introspect for proxies
      *
      * @var string
      */
-    protected $proxyHeader = 'HTTP_X_FORWARDED_FOR';
-
+    protected $proxy_header = 'HTTP_X_FORWARDED_FOR';
     /**
      * Changes proxy handling setting.
      *
@@ -52,60 +47,54 @@ class RemoteAddress
      * @param  bool  $useProxy Whether to check also proxied IP addresses.
      * @return $this
      */
-    public function setUseProxy($useProxy = true): static
+    public function set_use_proxy($use_proxy = true): static
     {
-        $this->useProxy = $useProxy;
+        $this->use_proxy = $use_proxy;
         return $this;
     }
-
     /**
      * Checks proxy handling setting.
      *
      * @return bool Current setting value.
      */
-    public function getUseProxy()
+    public function get_use_proxy()
     {
-        return $this->useProxy;
+        return $this->use_proxy;
     }
-
     /**
      * Set list of trusted proxy addresses
      *
      * @return $this
      */
-    public function setTrustedProxies(array $trustedProxies): static
+    public function set_trusted_proxies(array $trusted_proxies): static
     {
-        $this->trustedProxies = $trustedProxies;
+        $this->trusted_proxies = $trusted_proxies;
         return $this;
     }
-
     /**
      * Set the header to introspect for proxy IPs
      *
      * @param  string $header
      * @return $this
      */
-    public function setProxyHeader($header = 'X-Forwarded-For'): static
+    public function set_proxy_header($header = 'X-Forwarded-For'): static
     {
-        $this->proxyHeader = $this->normalizeProxyHeader($header);
+        $this->proxy_header = $this->normalize_proxy_header($header);
         return $this;
     }
-
     /**
      * Returns client IP address.
      *
      * @return string IP address.
      */
-    public function getIpAddress()
+    public function get_ip_address()
     {
-        $ip = $this->getIpAddressFromProxy();
+        $ip = $this->get_ip_address_from_proxy();
         if ($ip) {
             return $ip;
         }
-
         return $_SERVER['REMOTE_ADDR'] ?? '';
     }
-
     /**
      * Attempt to get the IP address for a proxied client
      *
@@ -113,32 +102,25 @@ class RemoteAddress
      *
      * @return false|string
      */
-    protected function getIpAddressFromProxy(): false|string
+    protected function get_ip_address_from_proxy(): false|string
     {
-        if (
-            ! $this->useProxy
-            || (isset($_SERVER['REMOTE_ADDR']) && ! in_array($_SERVER['REMOTE_ADDR'], $this->trustedProxies))
-        ) {
+        if (!$this->use_proxy || isset($_SERVER['REMOTE_ADDR']) && !in_array($_SERVER['REMOTE_ADDR'], $this->trusted_proxies)) {
             return false;
         }
-
-        $header = $this->proxyHeader;
-        if (! isset($_SERVER[$header]) || empty($_SERVER[$header])) {
+        $header = $this->proxy_header;
+        if (!isset($_SERVER[$header]) || empty($_SERVER[$header])) {
             return false;
         }
-
         // Extract IPs
         $ips = explode(',', (string) $_SERVER[$header]);
         // trim, so we can compare against trusted proxies properly
         $ips = array_map(trim(...), $ips);
         // remove trusted proxy IPs
-        $ips = array_diff($ips, $this->trustedProxies);
-
+        $ips = array_diff($ips, $this->trusted_proxies);
         // Any left?
         if (empty($ips)) {
             return false;
         }
-
         // Since we've removed any known, trusted proxy servers, the right-most
         // address represents the first IP we do not know about -- i.e., we do
         // not know if it is a proxy server, or a client. As such, we treat it
@@ -146,7 +128,6 @@ class RemoteAddress
         // @see http://en.wikipedia.org/wiki/X-Forwarded-For
         return array_pop($ips);
     }
-
     /**
      * Normalize a header string
      *
@@ -156,7 +137,7 @@ class RemoteAddress
      * @param  string $header
      * @return string
      */
-    protected function normalizeProxyHeader($header)
+    protected function normalize_proxy_header($header)
     {
         $header = strtoupper($header);
         $header = str_replace('-', '_', $header);

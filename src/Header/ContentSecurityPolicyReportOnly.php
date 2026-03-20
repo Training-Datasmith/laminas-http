@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Header;
 
 /**
@@ -9,12 +8,12 @@ namespace Laminas\Http\Header;
  *
  * @link http://www.w3.org/TR/CSP/
  */
-class ContentSecurityPolicyReportOnly extends ContentSecurityPolicy
+class Content_Security_Policy_Report_Only extends Content_Security_Policy
 {
     /**
      * Get the header name
      */
-    public function getFieldName(): string
+    public function get_field_name(): string
     {
         return 'Content-Security-Policy-Report-Only';
     }

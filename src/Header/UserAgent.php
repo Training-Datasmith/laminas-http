@@ -1,59 +1,50 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Header;
 
 use function str_replace;
 use function strtolower;
-
 /**
  * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43
  *
  * @throws Exception\InvalidArgumentException
  */
-class UserAgent implements HeaderInterface
+class User_Agent implements Header_Interface
 {
     /** @var string */
     protected $value;
-
     /**
      * @param string $headerLine
      */
-    public static function fromString($headerLine): static
+    public static function from_string($header_line): static
     {
-        [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
-
+        [$name, $value] = Generic_Header::split_header_line($header_line);
         // check to ensure proper header type for this factory
         if (str_replace(['_', ' ', '.'], '-', strtolower($name)) !== 'user-agent') {
             throw new Exception\InvalidArgumentException('Invalid header line for User-Agent string: "' . $name . '"');
         }
-
         // @todo implementation details
         return new static($value);
     }
-
     /** @param null|string $value */
     public function __construct($value = null)
     {
         if ($value !== null) {
-            HeaderValue::assertValid($value);
+            Header_Value::assert_valid($value);
             $this->value = $value;
         }
     }
-
-    public function getFieldName(): string
+    public function get_field_name(): string
     {
         return 'User-Agent';
     }
-
-    public function getFieldValue(): string
+    public function get_field_value(): string
     {
         return (string) $this->value;
     }
-
-    public function toString(): string
+    public function to_string(): string
     {
-        return 'User-Agent: ' . $this->getFieldValue();
+        return 'User-Agent: ' . $this->get_field_value();
     }
 }

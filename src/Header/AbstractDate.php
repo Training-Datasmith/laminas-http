@@ -1,23 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Header;
 
 use DateTime;
 use DateTimeZone;
 use Exception;
-
 use function is_numeric;
-
 use function is_string;
-
 use Laminas\Http\Header\Exception\InvalidArgumentException;
-
 use function sprintf;
 use function strtolower;
 use function strtotime;
-
 /**
  * Abstract Date/Time Header
  * Supports headers that have date/time as value
@@ -32,7 +26,7 @@ use function strtotime;
  * While RFC 1945 requires an absolute URI, most of the browsers also support relative URI
  * This class allows relative URIs, and let user retrieve URI instance if strict validation needed
  */
-abstract class AbstractDate implements HeaderInterface, \Stringable
+abstract class Abstract_Date implements Header_Interface, \Stringable
 {
     /**
      * Date formats according to RFC 2616
@@ -41,22 +35,19 @@ abstract class AbstractDate implements HeaderInterface, \Stringable
      */
     public const DATE_RFC1123 = 0;
     public const DATE_RFC1036 = 1;
-    public const DATE_ANSIC   = 2;
-
+    public const DATE_ANSIC = 2;
     /**
      * Date instance for this header
      *
      * @var DateTime
      */
     protected $date;
-
     /**
      * Date output format
      *
      * @var string
      */
-    protected static $dateFormat = 'D, d M Y H:i:s \G\M\T';
-
+    protected static $date_format = 'D, d M Y H:i:s \G\M\T';
     /**
      * Date formats defined by RFC 2616. RFC 1123 date is required
      * RFC 1036 and ANSI C formats are provided for compatibility with old servers/clients
@@ -65,12 +56,7 @@ abstract class AbstractDate implements HeaderInterface, \Stringable
      *
      * @var array
      */
-    protected static $dateFormats = [
-        self::DATE_RFC1123 => 'D, d M Y H:i:s \G\M\T',
-        self::DATE_RFC1036 => 'D, d M y H:i:s \G\M\T',
-        self::DATE_ANSIC   => 'D M j H:i:s Y',
-    ];
-
+    protected static $date_formats = [self::DATE_RFC1123 => 'D, d M Y H:i:s \G\M\T', self::DATE_RFC1036 => 'D, d M y H:i:s \G\M\T', self::DATE_ANSIC => 'D M j H:i:s Y'];
     /**
      * Create date-based header from string
      *
@@ -78,24 +64,17 @@ abstract class AbstractDate implements HeaderInterface, \Stringable
      * @return static
      * @throws InvalidArgumentException
      */
-    public static function fromString($headerLine)
+    public static function from_string($header_line)
     {
-        $dateHeader = new static();
-
-        [$name, $date] = GenericHeader::splitHeaderLine($headerLine);
-
+        $date_header = new static();
+        [$name, $date] = Generic_Header::split_header_line($header_line);
         // check to ensure proper header type for this factory
-        if (strtolower($name) !== strtolower($dateHeader->getFieldName())) {
-            throw new InvalidArgumentException(
-                'Invalid header line for "' . $dateHeader->getFieldName() . '" header string'
-            );
+        if (strtolower($name) !== strtolower($date_header->get_field_name())) {
+            throw new InvalidArgumentException('Invalid header line for "' . $date_header->get_field_name() . '" header string');
         }
-
-        $dateHeader->setDate($date);
-
-        return $dateHeader;
+        $date_header->set_date($date);
+        return $date_header;
     }
-
     /**
      * Create date-based header from strtotime()-compatible string
      *
@@ -103,11 +82,10 @@ abstract class AbstractDate implements HeaderInterface, \Stringable
      * @return static
      * @throws InvalidArgumentException
      */
-    public static function fromTimeString($time)
+    public static function from_time_string($time)
     {
-        return static::fromTimestamp(strtotime((string) $time));
+        return static::from_timestamp(strtotime((string) $time));
     }
-
     /**
      * Create date-based header from Unix timestamp
      *
@@ -115,49 +93,37 @@ abstract class AbstractDate implements HeaderInterface, \Stringable
      * @return static
      * @throws InvalidArgumentException
      */
-    public static function fromTimestamp($time)
+    public static function from_timestamp($time)
     {
-        $dateHeader = new static();
-
-        if (! $time || ! is_numeric($time)) {
-            throw new InvalidArgumentException(
-                'Invalid time for "' . $dateHeader->getFieldName() . '" header string'
-            );
+        $date_header = new static();
+        if (!$time || !is_numeric($time)) {
+            throw new InvalidArgumentException('Invalid time for "' . $date_header->get_field_name() . '" header string');
         }
-
-        $dateHeader->setDate(new DateTime('@' . $time));
-
-        return $dateHeader;
+        $date_header->set_date(new DateTime('@' . $time));
+        return $date_header;
     }
-
     /**
      * Set date output format
      *
      * @param int $format
      * @throws InvalidArgumentException
      */
-    public static function setDateFormat($format): void
+    public static function set_date_format($format): void
     {
-        if (! isset(static::$dateFormats[$format])) {
-            throw new InvalidArgumentException(sprintf(
-                'No constant defined for provided date format: %s',
-                $format
-            ));
+        if (!isset(static::$date_formats[$format])) {
+            throw new InvalidArgumentException(sprintf('No constant defined for provided date format: %s', $format));
         }
-
-        static::$dateFormat = static::$dateFormats[$format];
+        static::$date_format = static::$date_formats[$format];
     }
-
     /**
      * Return current date output format
      *
      * @return string
      */
-    public static function getDateFormat()
+    public static function get_date_format()
     {
-        return static::$dateFormat;
+        return static::$date_format;
     }
-
     /**
      * Set the date for this header, this can be a string or an instance of \DateTime
      *
@@ -165,38 +131,30 @@ abstract class AbstractDate implements HeaderInterface, \Stringable
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setDate($date)
+    public function set_date($date)
     {
         if (is_string($date)) {
             try {
                 $date = new DateTime($date, new DateTimeZone('GMT'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException(
-                    sprintf('Invalid date passed as string (%s)', $date),
-                    $e->getCode(),
-                    $e
-                );
+                throw new InvalidArgumentException(sprintf('Invalid date passed as string (%s)', $date), $e->get_code(), $e);
             }
-        } elseif (! $date instanceof DateTime) {
+        } elseif (!$date instanceof DateTime) {
             throw new InvalidArgumentException('Date must be an instance of \DateTime or a string');
         }
-
-        $date->setTimezone(new DateTimeZone('GMT'));
+        $date->set_timezone(new DateTimeZone('GMT'));
         $this->date = $date;
-
         return $this;
     }
-
     /**
      * Return date for this header
      *
      * @return string
      */
-    public function getDate()
+    public function get_date()
     {
-        return $this->date()->format(static::$dateFormat);
+        return $this->date()->format(static::$date_format);
     }
-
     /**
      * Return date for this header as an instance of \DateTime
      *
@@ -209,7 +167,6 @@ abstract class AbstractDate implements HeaderInterface, \Stringable
         }
         return $this->date;
     }
-
     /**
      * Compare provided date to date for this header
      * Returns < 0 if date in header is less than $date; > 0 if it's greater, and 0 if they are equal.
@@ -220,53 +177,44 @@ abstract class AbstractDate implements HeaderInterface, \Stringable
      * @return int
      * @throws InvalidArgumentException
      */
-    public function compareTo($date)
+    public function compare_to($date)
     {
         if (is_string($date)) {
             try {
                 $date = new DateTime($date, new DateTimeZone('GMT'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException(
-                    sprintf('Invalid Date passed as string (%s)', $date),
-                    $e->getCode(),
-                    $e
-                );
+                throw new InvalidArgumentException(sprintf('Invalid Date passed as string (%s)', $date), $e->get_code(), $e);
             }
-        } elseif (! $date instanceof DateTime) {
+        } elseif (!$date instanceof DateTime) {
             throw new InvalidArgumentException('Date must be an instance of \DateTime or a string');
         }
-
-        $dateTimestamp = $date->getTimestamp();
-        $thisTimestamp = $this->date()->getTimestamp();
-
-        return $thisTimestamp === $dateTimestamp ? 0 : ($thisTimestamp > $dateTimestamp ? 1 : -1);
+        $date_timestamp = $date->get_timestamp();
+        $this_timestamp = $this->date()->get_timestamp();
+        return $this_timestamp === $date_timestamp ? 0 : ($this_timestamp > $date_timestamp ? 1 : -1);
     }
-
     /**
      * Get header value as formatted date
      *
      * @return string
      */
-    public function getFieldValue()
+    public function get_field_value()
     {
-        return $this->getDate();
+        return $this->get_date();
     }
-
     /**
      * Return header line
      *
      * @return string
      */
-    public function toString()
+    public function to_string()
     {
-        return $this->getFieldName() . ': ' . $this->getDate();
+        return $this->get_field_name() . ': ' . $this->get_date();
     }
-
     /**
      * Allow casting to string
      */
     public function __toString(): string
     {
-        return $this->toString();
+        return $this->to_string();
     }
 }

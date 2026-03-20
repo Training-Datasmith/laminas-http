@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Client\Adapter;
 
 /**
@@ -9,7 +8,7 @@ namespace Laminas\Http\Client\Adapter;
  *
  * This interface describes Laminas\Http\Client\Adapter which supports streaming.
  */
-interface StreamInterface
+interface Stream_Interface
 {
     /**
      * Set output stream
@@ -19,5 +18,5 @@ interface StreamInterface
      * @param resource $stream Stream to write the output to
      * @return self
      */
-    public function setOutputStream($stream);
+    public function set_output_stream($stream);
 }

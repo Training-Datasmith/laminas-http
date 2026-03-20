@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Exception;
 
-interface ExceptionInterface
+interface Exception_Interface
 {
 }

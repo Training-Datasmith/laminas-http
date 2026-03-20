@@ -1,44 +1,38 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Header;
 
 use function explode;
 use function implode;
 use function strpos;
-
-class GenericMultiHeader extends GenericHeader implements MultipleHeaderInterface
+class Generic_Multi_Header extends Generic_Header implements Multiple_Header_Interface
 {
     /**
      * @param string $headerLine
      * @return static|static[]
      */
-    public static function fromString($headerLine): array|self
+    public static function from_string($header_line): array|self
     {
-        [$fieldName, $fieldValue] = GenericHeader::splitHeaderLine($headerLine);
-
-        if (strpos($fieldValue, ',')) {
+        [$field_name, $field_value] = Generic_Header::split_header_line($header_line);
+        if (strpos($field_value, ',')) {
             $headers = [];
-            foreach (explode(',', $fieldValue) as $multiValue) {
-                $headers[] = new static($fieldName, $multiValue);
+            foreach (explode(',', $field_value) as $multi_value) {
+                $headers[] = new static($field_name, $multi_value);
             }
             return $headers;
         }
-        return new static($fieldName, $fieldValue);
+        return new static($field_name, $field_value);
     }
-
-    public function toStringMultipleHeaders(array $headers): string
+    public function to_string_multiple_headers(array $headers): string
     {
-        $name   = $this->getFieldName();
-        $values = [$this->getFieldValue()];
+        $name = $this->get_field_name();
+        $values = [$this->get_field_value()];
         foreach ($headers as $header) {
-            if (! $header instanceof static) {
-                throw new Exception\InvalidArgumentException(
-                    'This method toStringMultipleHeaders was expecting an array of headers of the same type'
-                );
+            if (!$header instanceof static) {
+                throw new Exception\InvalidArgumentException('This method toStringMultipleHeaders was expecting an array of headers of the same type');
             }
-            $values[] = $header->getFieldValue();
+            $values[] = $header->get_field_value();
         }
         return $name . ': ' . implode(',', $values) . "\r\n";
     }

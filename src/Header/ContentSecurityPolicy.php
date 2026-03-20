@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Header;
 
 use function array_pad;
@@ -13,20 +12,19 @@ use function sprintf;
 use function str_replace;
 use function strcasecmp;
 use function trim;
-
 /**
  * Content Security Policy Level 3 Header
  *
  * @link http://www.w3.org/TR/CSP/
  */
-class ContentSecurityPolicy implements MultipleHeaderInterface
+class Content_Security_Policy implements Multiple_Header_Interface
 {
     /**
      * Valid directive names
      *
      * @var array
      */
-    protected $validDirectiveNames = [
+    protected $valid_directive_names = [
         // As per http://www.w3.org/TR/CSP/#directives
         // Fetch directives
         'child-src',
@@ -46,21 +44,17 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
         'style-src-elem',
         'style-src-attr',
         'worker-src',
-
         // Document directives
         'base-uri',
         'plugin-types',
         'sandbox',
-
         // Navigation directives
         'form-action',
         'frame-ancestors',
         'navigate-to',
-
         // Reporting directives
         'report-uri',
         'report-to',
-
         // Other directives
         'block-all-mixed-content',
         'require-sri-for',
@@ -68,24 +62,21 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
         'trusted-types',
         'upgrade-insecure-requests',
     ];
-
     /**
      * The directives defined for this policy
      *
      * @var array
      */
     protected $directives = [];
-
     /**
      * Get the list of defined directives
      *
      * @return array
      */
-    public function getDirectives()
+    public function get_directives()
     {
         return $this->directives;
     }
-
     /**
      * Sets the directive to consist of the source list
      *
@@ -96,31 +87,18 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
      * @return $this
      * @throws Exception\InvalidArgumentException If the name is not a valid directive name.
      */
-    public function setDirective($name, array $sources): static
+    public function set_directive($name, array $sources): static
     {
-        if (! in_array($name, $this->validDirectiveNames, true)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s expects a valid directive name; received "%s"',
-                __METHOD__,
-                (string) $name
-            ));
+        if (!in_array($name, $this->valid_directive_names, true)) {
+            throw new Exception\InvalidArgumentException(sprintf('%s expects a valid directive name; received "%s"', __METHOD__, (string) $name));
         }
-
-        if (
-            $name === 'block-all-mixed-content'
-            || $name === 'upgrade-insecure-requests'
-        ) {
+        if ($name === 'block-all-mixed-content' || $name === 'upgrade-insecure-requests') {
             if ($sources) {
-                throw new Exception\InvalidArgumentException(sprintf(
-                    'Received value for %s directive; none expected',
-                    $name
-                ));
+                throw new Exception\InvalidArgumentException(sprintf('Received value for %s directive; none expected', $name));
             }
-
             $this->directives[$name] = '';
             return $this;
         }
-
         if (empty($sources)) {
             if ('report-uri' === $name) {
                 if (isset($this->directives[$name])) {
@@ -128,65 +106,52 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
                 }
                 return $this;
             }
-
             $this->directives[$name] = "'none'";
             return $this;
         }
-
         array_walk($sources, [__NAMESPACE__ . '\HeaderValue', 'assertValid']);
         $this->directives[$name] = implode(' ', $sources);
-
         return $this;
     }
-
     /**
      * Create Content Security Policy header from a given header line
      *
      * @param string $headerLine The header line to parse.
      * @throws Exception\InvalidArgumentException If the name field in the given header line does not match.
      */
-    public static function fromString($headerLine): static
+    public static function from_string($header_line): static
     {
-        $header         = new static();
-        $headerName     = $header->getFieldName();
-        [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
+        $header = new static();
+        $header_name = $header->get_field_name();
+        [$name, $value] = Generic_Header::split_header_line($header_line);
         // Ensure the proper header name
-        if (strcasecmp($name, $headerName) !== 0) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid header line for %s string: "%s"',
-                $headerName,
-                $name
-            ));
+        if (strcasecmp($name, $header_name) !== 0) {
+            throw new Exception\InvalidArgumentException(sprintf('Invalid header line for %s string: "%s"', $header_name, $name));
         }
         // As per http://www.w3.org/TR/CSP/#parsing
         $tokens = explode(';', $value);
         foreach ($tokens as $token) {
             $token = trim($token);
             if ($token) {
-                [$directiveName, $directiveValue] = array_pad(explode(' ', $token, 2), 2, null);
-                if (! isset($header->directives[$directiveName])) {
-                    $header->setDirective(
-                        $directiveName,
-                        $directiveValue === null ? [] : [$directiveValue]
-                    );
+                [$directive_name, $directive_value] = array_pad(explode(' ', $token, 2), 2, null);
+                if (!isset($header->directives[$directive_name])) {
+                    $header->set_directive($directive_name, $directive_value === null ? [] : [$directive_value]);
                 }
             }
         }
         return $header;
     }
-
     /**
      * Get the header name
      */
-    public function getFieldName(): string
+    public function get_field_name(): string
     {
         return 'Content-Security-Policy';
     }
-
     /**
      * Get the header value
      */
-    public function getFieldValue(): string
+    public function get_field_value(): string
     {
         $directives = [];
         foreach ($this->directives as $name => $value) {
@@ -194,28 +159,22 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
         }
         return str_replace(' ;', ';', implode(' ', $directives));
     }
-
     /**
      * Return the header as a string
      */
-    public function toString(): string
+    public function to_string(): string
     {
-        return sprintf('%s: %s', $this->getFieldName(), $this->getFieldValue());
+        return sprintf('%s: %s', $this->get_field_name(), $this->get_field_value());
     }
-
-    public function toStringMultipleHeaders(array $headers): string
+    public function to_string_multiple_headers(array $headers): string
     {
-        $strings = [$this->toString()];
+        $strings = [$this->to_string()];
         foreach ($headers as $header) {
-            if (! $header instanceof ContentSecurityPolicy) {
-                throw new Exception\RuntimeException(
-                    'The ContentSecurityPolicy multiple header implementation can only'
-                    . ' accept an array of ContentSecurityPolicy headers'
-                );
+            if (!$header instanceof Content_Security_Policy) {
+                throw new Exception\RuntimeException('The ContentSecurityPolicy multiple header implementation can only' . ' accept an array of ContentSecurityPolicy headers');
             }
-            $strings[] = $header->toString();
+            $strings[] = $header->to_string();
         }
-
         return implode("\r\n", $strings) . "\r\n";
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Header;
 
 /**
@@ -9,12 +8,12 @@ namespace Laminas\Http\Header;
  *
  * @link       http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.14
  */
-class ContentLocation extends AbstractLocation
+class Content_Location extends Abstract_Location
 {
     /**
      * Return header name
      */
-    public function getFieldName(): string
+    public function get_field_name(): string
     {
         return 'Content-Location';
     }

@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Http\Header;
 
-interface MultipleHeaderInterface extends HeaderInterface
+interface Multiple_Header_Interface extends Header_Interface
 {
     /**
      * Convert multiple headers to string representation
@@ -12,5 +11,5 @@ interface MultipleHeaderInterface extends HeaderInterface
      * @param array $headers Array of header instances
      * @return string
      */
-    public function toStringMultipleHeaders(array $headers);
+    public function to_string_multiple_headers(array $headers);
 }

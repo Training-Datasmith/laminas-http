@@ -1,25 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Http\Header\Accept\FieldValuePart;
+declare (strict_types=1);
+namespace Laminas\Http\Header\Accept\Field_Value_Part;
 
 use stdClass;
-
 /**
  * Field Value Part
  *
  * @see        http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
  */
-abstract class AbstractFieldValuePart
+abstract class Abstract_Field_Value_Part
 {
     /**
      * A Field Value Part this Field Value Part matched against.
      *
      * @var AbstractFieldValuePart
      */
-    protected $matchedAgainst;
-
+    protected $matched_against;
     /**
      * @param object $internalValues
      */
@@ -27,76 +24,69 @@ abstract class AbstractFieldValuePart
         /**
          * Internal object used for value retrieval
          */
-        private $internalValues
-    ) {
+        private $internal_values
+    )
+    {
     }
-
     /**
      * Set a Field Value Part this Field Value Part matched against.
      *
      * @return $this
      */
-    public function setMatchedAgainst(AbstractFieldValuePart $matchedAgainst)
+    public function set_matched_against(Abstract_Field_Value_Part $matched_against)
     {
-        $this->matchedAgainst = $matchedAgainst;
+        $this->matched_against = $matched_against;
         return $this;
     }
-
     /**
      * Get a Field Value Part this Field Value Part matched against.
      *
      * @return AbstractFieldValuePart|null
      */
-    public function getMatchedAgainst()
+    public function get_matched_against()
     {
-        return $this->matchedAgainst;
+        return $this->matched_against;
     }
-
     /**
      * @return object
      */
-    protected function getInternalValues()
+    protected function get_internal_values()
     {
-        return $this->internalValues;
+        return $this->internal_values;
     }
-
     /**
      * @return string $typeString
      */
-    public function getTypeString()
+    public function get_type_string()
     {
-        return $this->getInternalValues()->typeString;
+        return $this->get_internal_values()->type_string;
     }
-
     /**
      * @return float $priority
      */
-    public function getPriority()
+    public function get_priority()
     {
-        return (float) $this->getInternalValues()->priority;
+        return (float) $this->get_internal_values()->priority;
     }
-
     /**
      * @return stdClass $params
      */
-    public function getParams()
+    public function get_params()
     {
-        return (object) $this->getInternalValues()->params;
+        return (object) $this->get_internal_values()->params;
     }
-
     /**
      * @return string $raw
      */
-    public function getRaw()
+    public function get_raw()
     {
-        return $this->getInternalValues()->raw;
+        return $this->get_internal_values()->raw;
     }
-
     /**
      * @param mixed $key
      */
     public function __get(string $key): mixed
     {
-        return $this->getInternalValues()->$key;
+        return $this->get_internal_values()->{$key};
     }
 }

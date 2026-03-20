@@ -1,21 +1,20 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Http\Header\Accept\FieldValuePart;
+declare (strict_types=1);
+namespace Laminas\Http\Header\Accept\Field_Value_Part;
 
 /**
  * Field Value Part
  *
  * @see        http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
  */
-class CharsetFieldValuePart extends AbstractFieldValuePart
+class Charset_Field_Value_Part extends Abstract_Field_Value_Part
 {
     /**
      * @return string
      */
-    public function getCharset()
+    public function get_charset()
     {
-        return $this->getInternalValues()->type;
+        return $this->get_internal_values()->type;
     }
 }
