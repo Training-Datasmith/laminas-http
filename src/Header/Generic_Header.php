@@ -18,23 +18,28 @@ class Generic_Header implements Header_Interface
     /** @var string */
     protected $field_value;
     /**
-     * Factory to generate a header object from a string
+     * Create a header instance by parsing a raw header line string.
      *
-     * @param string $headerLine
+     * @param string $header_line A raw HTTP header line in the form "Name: Value"
+     * @return static The instantiated header object
+     * @throws Exception\InvalidArgumentException If the line format or value is invalid
+     * @since 2.0.0
      */
-    public static function from_string($header_line): static
+    public static function from_string(string $header_line): static
     {
         [$field_name, $field_value] = self::split_header_line($header_line);
         return new static($field_name, $field_value);
     }
     /**
-     * Splits the header line in `name` and `value` parts.
+     * Split a raw header line into its name and value parts.
      *
-     * @param string $headerLine
-     * @return string[] `name` in the first index and `value` in the second.
-     * @throws Exception\InvalidArgumentException If header does not match with the format ``name:value``.
+     * @param string $header_line A raw header line in "Name: Value" format
+     * @return array{0: string, 1: string} Index 0 is the field name, index 1 is the field value
+     * @throws Exception\InvalidArgumentException If the line does not contain a colon separator
+     *         or if the value portion fails RFC 7230 validation
+     * @since 2.0.0
      */
-    public static function split_header_line($header_line): array
+    public static function split_header_line(string $header_line): array
     {
         $parts = explode(':', $header_line, 2);
         if (count($parts) !== 2) {
@@ -47,12 +52,15 @@ class Generic_Header implements Header_Interface
         return $parts;
     }
     /**
-     * Constructor
+     * Construct a generic HTTP header with an optional name and value.
      *
-     * @param null|string $fieldName
-     * @param null|string $fieldValue
+     * @param string|null $field_name  The header field name (RFC 7230 token); null to set later
+     * @param string|null $field_value The header field value; null to set later
+     * @throws Exception\InvalidArgumentException If $field_name is not a valid RFC 7230 token
+     * @throws Exception\InvalidArgumentException If $field_value fails RFC 7230 validation
+     * @since 2.0.0
      */
-    public function __construct($field_name = null, $field_value = null)
+    public function __construct(?string $field_name = null, ?string $field_value = null)
     {
         if ($field_name) {
             $this->set_field_name($field_name);
@@ -62,13 +70,17 @@ class Generic_Header implements Header_Interface
         }
     }
     /**
-     * Set header field name
+     * Set the header field name.
      *
-     * @param  string $fieldName
-     * @return $this
-     * @throws Exception\InvalidArgumentException If the name does not match with RFC 2616 format.
+     * Must be a valid RFC 7230 token: only tchar characters are permitted
+     * (alphanumerics, and the symbols !#$%&'*+-.^_`|~).
+     *
+     * @param string $field_name The header field name to set
+     * @return static Fluent interface
+     * @throws Exception\InvalidArgumentException If $field_name is empty or not a valid RFC 7230 token
+     * @since 2.0.0
      */
-    public function set_field_name($field_name): static
+    public function set_field_name(string $field_name): static
     {
         if (!is_string($field_name) || empty($field_name)) {
             throw new Exception\InvalidArgumentException('Header name must be a string');
@@ -89,21 +101,27 @@ class Generic_Header implements Header_Interface
         return $this;
     }
     /**
-     * Retrieve header field name
+     * Retrieve the header field name.
      *
-     * @return string
+     * @return string The RFC 7230 token used as the header field name
+     * @since 2.0.0
      */
-    public function get_field_name()
+    public function get_field_name(): string
     {
         return $this->field_name;
     }
     /**
-     * Set header field value
+     * Set the header field value.
      *
-     * @param  string $fieldValue
-     * @return $this
+     * The value is validated against RFC 7230 rules — CRLF injection characters
+     * will cause an exception. Whitespace-only values are normalised to empty string.
+     *
+     * @param string $field_value The raw header field value to set
+     * @return static Fluent interface
+     * @throws Exception\InvalidArgumentException If $field_value contains invalid characters
+     * @since 2.0.0
      */
-    public function set_field_value($field_value): static
+    public function set_field_value(string $field_value): static
     {
         $field_value = (string) $field_value;
         Header_Value::assert_valid($field_value);
@@ -114,11 +132,12 @@ class Generic_Header implements Header_Interface
         return $this;
     }
     /**
-     * Retrieve header field value
+     * Retrieve the header field value.
      *
-     * @return string
+     * @return string The validated, normalised header field value
+     * @since 2.0.0
      */
-    public function get_field_value()
+    public function get_field_value(): string
     {
         return $this->field_value;
     }

@@ -26,14 +26,17 @@ abstract class Abstract_Message extends Message implements \Stringable
     /** @var Headers|null */
     protected $headers;
     /**
-     * Set the HTTP version for this object, one of 1.0, 1.1 or 2
-     * (AbstractMessage::VERSION_10, AbstractMessage::VERSION_11, AbstractMessage::VERSION_2)
+     * Set the HTTP version for this message.
      *
-     * @param  string $version (Must be 1.0, 1.1 or 2)
-     * @return $this
-     * @throws Exception\InvalidArgumentException
+     * Accepted values are the class constants VERSION_10 ('1.0'), VERSION_11 ('1.1'),
+     * and VERSION_2 ('2'). Using an unsupported version string will throw immediately.
+     *
+     * @param string $version One of the VERSION_* class constants
+     * @return static Fluent interface
+     * @throws Exception\InvalidArgumentException If $version is not a recognised HTTP version
+     * @since 2.0.0
      */
-    public function set_version($version)
+    public function set_version(string $version): static
     {
         if (!in_array($version, [self::VERSION_10, self::VERSION_11, self::VERSION_2])) {
             throw new Exception\InvalidArgumentException('Not valid or not supported HTTP version: ' . $version);
@@ -42,33 +45,42 @@ abstract class Abstract_Message extends Message implements \Stringable
         return $this;
     }
     /**
-     * Return the HTTP version for this request
+     * Return the HTTP version for this message.
      *
-     * @return string
+     * @return string One of the VERSION_* constants ('1.0', '1.1', or '2')
+     * @since 2.0.0
      */
-    public function get_version()
+    public function get_version(): string
     {
         return $this->version;
     }
     /**
-     * Provide an alternate Parameter Container implementation for headers in this object,
-     * (this is NOT the primary API for value setting, for that see getHeaders())
+     * Replace the headers container for this message.
      *
-     * @see    getHeaders()
+     * This is NOT the primary API for adding individual headers; use get_headers()
+     * and operate on the returned Headers container instead.
      *
-     * @return $this
+     * @param Headers $headers A fully-constructed headers container to attach
+     * @return static Fluent interface
+     * @see get_headers() For adding or reading individual headers
+     * @since 2.0.0
      */
-    public function set_headers(Headers $headers)
+    public function set_headers(Headers $headers): static
     {
         $this->headers = $headers;
         return $this;
     }
     /**
-     * Return the header container responsible for headers
+     * Return the headers container for this message, lazy-initialising if needed.
      *
-     * @return Headers
+     * If no container has been set, a new empty Headers instance is created.
+     * If a raw string was assigned (e.g. during fromString lazy loading), it is
+     * parsed into a Headers object on first access.
+     *
+     * @return Headers The headers container for this message
+     * @since 2.0.0
      */
-    public function get_headers()
+    public function get_headers(): Headers
     {
         if ($this->headers === null || is_string($this->headers)) {
             // this is only here for fromString lazy loading
